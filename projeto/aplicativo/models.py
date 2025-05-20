@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class CadastroUser(models.Model):
@@ -17,3 +18,8 @@ class CadastroTatuador(models.Model):
 
     def __str__(self):
         return self.tatuador_text
+
+class Mensagem(models.Model):
+    autor = models.CharField(max_length=20)  # "cliente" ou "tatuador"
+    texto = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
