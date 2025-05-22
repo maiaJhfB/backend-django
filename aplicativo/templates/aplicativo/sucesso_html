@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <title>Cadastro Realizado</title>
+  <link rel="shortcut icon" href="assets/images/pngtree-colorful-lion-portrait-for-tattoo-logo-and-decor-vector-png-image-35388436.jpg-128x128.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="assets/theme/css/style.css">
+  <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css">
+</head>
+<body>
+
+<section data-bs-version="5.1" class="menu menu1 cid-uKcyTKGA6v" once="menu" id="menu1-sucesso">
+  <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
+    <div class="container">
+      <div class="navbar-brand">
+        <span class="navbar-caption-wrap">
+          <a class="navbar-caption text-black text-primary display-7" href="page3.html">InkEtrom</a>
+        </span>
+      </div>
+    </div>
+  </nav>
+</section>
+
+<section class="content5 cid-uKczSucesso" id="content5-sucesso">
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-12 col-md-10 text-center">
+        <h2 class="mbr-section-title mbr-fonts-style mb-4 display-2">
+          <strong>Cadastro realizado com sucesso!</strong>
+        </h2>
+        <p class="mbr-text mbr-fonts-style display-5">
+          Bem-vindo à comunidade InkEtrom.
+        </p>
+        <div class="mbr-section-btn mt-4">
+          <a class="btn btn-danger display-4" href="home.html">Voltar para a Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
