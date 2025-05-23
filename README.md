@@ -118,7 +118,8 @@ projeto/
 
 #Informações sobre o loggin
 - A operação do loggin é o resultado do conjunto de quatro instancias
-#1 - No html(loggin.html), onde houveram mudanças na pagina para que ela referencie a url do django e eantão fosse integrada ao ecossistema
-#2 = No arquivo forms, onde a função LoginForm, serã a responsçável por efetivamente requisitar e extrais os dados
-#3- No arquivo views, que será responsssável por, puxar a função de requisição do forms, fazer o tratamento e autenticação dos dados, e por fim puxar a função de loggin do django, reponsçável por manter o cadastro ativo durante a navegação do usuário
+-#1 - No html(loggin.html), onde houveram mudanças na pagina para que ela referencie a url do django e eantão fosse integrada ao ecossistema
+-#2 - No arquivo forms, onde a função LoginForm, serã a responsçável por efetivamente requisitar e extrais os dados
+-#3 - No arquivo views, que será responsssável por, puxar a função de requisição do forms, fazer o tratamento e autenticação dos dados, e por fim puxar a função de loggin do django, reponsçável por manter o cadastro ativo durante a navegação do usuário
+-4# - E é claro no model que é onde é instanciado o perfil de usuário no banco de dados, que é conectada com o viws atraves da função save que esta sim se liga diretamente a instancia de usuario no banco de dados localizada no models
 
