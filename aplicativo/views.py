@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import PerfilUsuario, CadastroTatuador, Mensagem
 from .forms import MensagemForm, CadastroUsuarioForm, LoginForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
+from django import forms
 
 # Create your views here.
 
@@ -77,18 +80,28 @@ def artistas_view(request):
 def termos_view(request):
     return render(request, 'aplicativo/termos_privacidade.html')
 
-@login_required(login_url='login')
-def user_preview(request):
-    try:
-        perfil = request.user.perfil
-        context = {
-            'usuario': request.user,
-            'perfil': perfil
-        }
-    except:
-        context = {
-            'usuario': request.user,
-            'perfil': None
-        }
+def sucesso(request):
+    return render(request, 'sucesso.html')
+
+class EditarNomeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+@login_required
+def editar_nome(request):
+    if request.method == 'POST':
+        form = EditarNomeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_preview')  # redireciona para a página do perfil
+    else:
+        form = EditarNomeForm(instance=request.user)
     
-    return render(request, 'aplicativo/user_preview.html', context)
+    return render(request, 'aplicativo/editar_nome.html', {'form': form})
+
+@login_required
+def user_preview(request):
+    return render(request, 'aplicativo/user_preview.html', {
+        'usuario': request.user  # envia o usuário logado com o nome atualizado
+    })
