@@ -20,7 +20,7 @@ def cadastrar_pessoa(request):
             user = form.save()
             messages.success(request, 'Cadastro realizado com sucesso!')
             login(request, user)  # Faz login automático após cadastro
-            return redirect('sucesso')
+            return redirect('user_preview')
     else:
         form = CadastroUsuarioForm()
 
@@ -36,7 +36,7 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)
-                return redirect('sucesso')
+                return redirect('user_preview')
             else:
                 messages.error(request, 'Nome de usuário ou senha incorretos.')
     else:
