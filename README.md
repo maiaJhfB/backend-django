@@ -1,4 +1,4 @@
-# Projeto NAO - Integração de Páginas HTML com Django
+# Projeto Inketrom - Integração de Páginas HTML com Django
 
 Este documento contém instruções para a execução e manutenção do projeto NAO, que integra páginas HTML ao ecossistema Django.
 
