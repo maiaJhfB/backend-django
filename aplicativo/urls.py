@@ -8,6 +8,7 @@ urlpatterns = [
     path('user-preview/', views.user_preview, name='user_preview'),
     path('user/', views.sucesso, name='sucesso'),
     path('editar-nome/', views.editar_nome, name='editar_nome'),
+    path('chat/<str:nome_artista>/', views.chat_view, name='chat'),
     path('chat/', views.chat_view, name='chat'),
     path('carol/', views.carol_view, name='carol'),
     path('lucas/', views.lucas_view, name='lucas'),

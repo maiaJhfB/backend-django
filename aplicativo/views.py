@@ -48,22 +48,9 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-def chat_view(request):
-    mensagens = Mensagem.objects.order_by('timestamp')
-    
-    if request.method == 'POST':
-        form = MensagemForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('chat')
-    else:
-        form = MensagemForm(initial={'autor': 'cliente'})  # ou 'tatuador'
-
-    return render(request, 'aplicativo/chat.html', {
-        'mensagens': mensagens,
-        'form': form,
-        'contato_nome': 'Maria Clara',  # opcional: pode ser dinâmico
-    })
+def chat_view(request, nome_artista):
+    context = {'nome_artista': nome_artista}
+    return render(request, 'aplicativo/chat.html', context)
 
 def carol_view(request):
     return render(request, 'aplicativo/carol.html')
