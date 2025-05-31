@@ -85,137 +85,55 @@
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(35, 35, 35);">
     </div>
     <div class="container">
+        {% for artista in artistas %}
         <div class="item features-image">
             <div class="item-wrapper">
                 <div class="row align-items-center">
                     <div class="col-12 col-md-3">
                         <div class="image-wrapper">
-                            <img src="{% static 'assets/images/mbr-815x565.jpg' %}" alt="Mobirise Website Builder">
+                            <img src="{% static 'assets/images/mbr-815x565.jpg' %}" alt="Foto do Artista">
                         </div>
                     </div>
                     <div class="col-12 col-md">
                         <div class="card-box">
-                            <h5 class="card-title mbr-fonts-style m-0 mb-3 display-5"><strong>Nathalia Mattar</strong></h5>
-                            <h6 class="card-subtitle mbr-fonts-style mb-3 display-4"><strong>Tatuadora há 12 anos.
-</strong><div><strong>Vila Prudente - SP</strong></div></h6>
+                            <h5 class="card-title mbr-fonts-style m-0 mb-3 display-5"><strong>{{ artista.primeiro_nome }} {{ artista.sobre_nome }}</strong></h5>
+                            <h6 class="card-subtitle mbr-fonts-style mb-3 display-4">
+                                <strong>Tatuador(a) há X anos.
+                                </strong><div><strong>{{ artista.nome_estudio }} - SP</strong></div>
+                            </h6>
                             <p class="mbr-text mbr-fonts-style display-7">
-                                Olá! Sou Nathalia e vivo a arte da tatuagem há 12 anos. Tenho um grande apreço pelos clássicos old schools e pela precisão do realismo. 
+                                Descrição do artista aqui.
                             </p>
                             <div class="social-row display-7">
                                 <div class="soc-item">
-                                    <a href="https://www.facebook.com/natalia.tatuadora.2025" target="_blank">
+                                    <a href="#" target="_blank">
                                         <span class="mbr-iconfont socicon-facebook socicon"></span>
                                     </a>
                                 </div>
                                 <div class="soc-item">
-                                    <a href="{% url 'natalia' %}" target="_blank">
+                                    <a href="#" target="_blank">
                                         <span class="mbr-iconfont mobi-mbri-folder mobi-mbri"></span>
                                     </a>
                                 </div>
                                 <div class="soc-item">
-                                    <a href="https://www.instagram.com/nataliamattartatuadora/" target="_blank">
+                                    <a href="#" target="_blank">
                                         <span class="mbr-iconfont socicon-instagram socicon"></span>
                                     </a>
                                 </div>
                                 <div class="soc-item">
-                                    <a href="{% url 'chat' 'Nathalia Matter' %}" title="Chat com Nathalia Matter">
+                                    <a href="{% url 'chat_com_artista' artista.id %}" title="Chat com {{ artista.primeiro_nome }}">
                                         <span class="mbr-iconfont mobi-mbri-chat mobi-mbri"></span>
                                     </a>
                                 </div>
-                                
-                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="item features-image">
-            <div class="item-wrapper">
-                <div class="row align-items-center">
-                    <div class="col-12 col-md-3">
-                        <div class="image-wrapper">
-                            <img src="{% static 'assets/images/mbr-375x250.jpg' %}" alt="Mobirise Website Builder">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md">
-                        <div class="card-box">
-                            <h5 class="card-title mbr-fonts-style m-0 mb-3 display-5"><strong>Carolina Amaral</strong></h5>
-                            <h6 class="card-subtitle mbr-fonts-style mb-3 display-4"><strong>Body piercer há 3 anos
-</strong><div><strong>Vila Prudente - SP</strong></div></h6>
-                            <p class="mbr-text mbr-fonts-style display-7">Prazer! Sou Carolina, bióloga especializada em biossegurança e sua profissional de piercing de confiança. Priorizo a segurança e a higiene em cada procedimento. Venha fazer seu piercing comigo!</p>
-                            <div class="social-row display-7">
-                                <div class="soc-item">
-                                    <a href="https://www.facebook.com/carolina.amaral.3990" target="_blank">
-                                        <span class="mbr-iconfont socicon-facebook socicon"></span>
-                                    </a>
-                                </div>
-                                <div class="soc-item">
-                                    <a href="{% url 'carol' %}" target="_blank">
-                                        <span class="mbr-iconfont mobi-mbri-folder mobi-mbri"></span>
-                                    </a>
-                                </div>
-                                <div class="soc-item">
-                                    <a href="https://www.instagram.com/carol_bodypiercing_/" target="_blank">
-                                        <span class="mbr-iconfont socicon-instagram socicon"></span>
-                                    </a>
-                                </div>
-                                <div class="soc-item">
-                                    <a href="{% url 'chat' 'Carolina Amaral' %}" title="Chat com Carolina Amaral">
-                                        <span class="mbr-iconfont mobi-mbri-chat mobi-mbri"></span>
-                                    </a>
-                                </div>
-                                
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="item features-image">
-            <div class="item-wrapper">
-                <div class="row align-items-center">
-                    <div class="col-12 col-md-3">
-                        <div class="image-wrapper">
-                            <img src="{% static 'assets/images/mbr-815x611.jpg' %}" alt="Mobirise Website Builder">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md">
-                        <div class="card-box">
-                            <h5 class="card-title mbr-fonts-style m-0 mb-3 display-5"><strong>Lucas Maciel</strong></h5>
-                            <h6 class="card-subtitle mbr-fonts-style mb-3 display-4"><strong>Tatuador há 2 anos
-</strong><div><strong>Jardim - Santo André</strong></div></h6>
-                            <p class="mbr-text mbr-fonts-style display-7">
-                                atuador com 2 anos de experiência, com foco em traços delicados (fine line) e a rica estética oriental. Convido você a discutir sua próxima tatuagem via chat e conhecer meu portfólio nas redes.</p>
-                            <div class="social-row display-7">
-                                <div class="soc-item">
-                                    <a href="https://www.facebook.com/Mobirise/" target="_blank">
-                                        <span class="mbr-iconfont socicon socicon-facebook"></span>
-                                    </a>
-                                </div>
-                                <div class="soc-item">
-                                    <a href="{% url 'lucas' %}" target="_blank">
-                                        <span class="mbr-iconfont mobi-mbri-folder mobi-mbri"></span>
-                                    </a>
-                                </div>
-                                <div class="soc-item">
-                                    <a href="https://instagram.com/mobirise" target="_blank">
-                                        <span class="mbr-iconfont socicon socicon-instagram"></span>
-                                    </a>
-                                </div>
-                                <div class="soc-item">
-                                    <a href="{% url 'chat' 'Lucas Maciel' %}" title="Chat com Lucas Maciel">
-                                        <span class="mbr-iconfont mobi-mbri-chat mobi-mbri"></span>
-                                    </a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% empty %}
+        <p class="mbr-text mbr-fonts-style display-7">Nenhum artista cadastrado ainda.</p>
+        {% endfor %}
     </div>
 </section>
 

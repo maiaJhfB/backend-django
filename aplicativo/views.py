@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import PerfilUsuario, CadastroTatuador, Mensagem
+from .models import PerfilUsuario, CadastroTatuador, Mensagem, Conversa # Import Conversa
 from .forms import MensagemForm, CadastroUsuarioForm, LoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from django import forms
+from django.utils import timezone
+
 
 # Create your views here.
 
@@ -48,9 +50,44 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-def chat_view(request, nome_artista):
-    context = {'nome_artista': nome_artista}
-    return render(request, 'aplicativo/chat.html', context)
+@login_required
+def chat_view(request, artista_id=None):
+    user = request.user
+    conversas_do_usuario = Conversa.objects.filter(usuario=user).order_by('-ultima_atualizacao')
+    
+    current_conversa = None
+    artista_selecionado = None
+    mensagens = []
+    
+    if artista_id:
+        artista_selecionado = get_object_or_404(CadastroTatuador, id=artista_id)
+        current_conversa, created = Conversa.objects.get_or_create(
+            usuario=user,
+            artista=artista_selecionado
+        )
+        mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
+
+    if request.method == "POST" and current_conversa: # Only allow sending messages if a chat is selected
+        form = MensagemForm(request.POST)
+        if form.is_valid():
+            nova_msg = form.save(commit=False)
+            nova_msg.conversa = current_conversa
+            nova_msg.remetente = user # The logged-in user is the sender
+            nova_msg.save()
+            current_conversa.ultima_atualizacao = timezone.now() # Update conversation timestamp
+            current_conversa.save()
+            return redirect('chat_com_artista', artista_id=artista_id) # Redirect to the specific chat
+    else:
+        form = MensagemForm()
+
+    return render(request, 'aplicativo/chat.html', {
+    'conversas_do_usuario': conversas_do_usuario,
+    'artista_selecionado': artista_selecionado,
+    'mensagens': mensagens,
+    'form': form,
+    'current_user_id': user.id,
+})
+
 
 def carol_view(request):
     return render(request, 'aplicativo/carol.html')
@@ -62,7 +99,8 @@ def natalia_view(request):
     return render(request, 'aplicativo/natalia.html')
 
 def artistas_view(request):
-    return render(request, 'aplicativo/artistas.html')
+    artistas = CadastroTatuador.objects.all() # Fetch all artists
+    return render(request, 'aplicativo/artistas.html', {'artistas': artistas})
 
 def termos_view(request):
     return render(request, 'aplicativo/termos_privacidade.html')

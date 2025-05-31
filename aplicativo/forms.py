@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Mensagem, PerfilUsuario
+from .models import Mensagem, PerfilUsuario, Conversa, CadastroTatuador # Import new models
 
 class LoginForm(forms.Form):
     username = forms.CharField(label="Nome de usuário", max_length=150)
@@ -32,9 +32,7 @@ class CadastroUsuarioForm(UserCreationForm):
 class MensagemForm(forms.ModelForm):
     class Meta:
         model = Mensagem
-        fields = ['autor', 'texto']
+        fields = ['texto'] # 'conversa' and 'remetente' will be set in the view
         widgets = {
             'texto': forms.TextInput(attrs={'placeholder': 'Digite sua mensagem...'}),
-            'autor': forms.HiddenInput(),
         }
-        

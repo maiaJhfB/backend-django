@@ -5,11 +5,83 @@
   
   <meta charset="UTF-8">
   <title>Chat</title>
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v6.0.1, mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="{% static 'assets/images/pngtree-colorful-lion-portrait-for-tattoo-logo-and-decor-vector-png-image-35388436.jpg-128x128.png' %}" type="image/x-icon">
+  <meta name="description" content="">
+  
+  
+  <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/web/assets/gdpr-plugin/gdpr-styles.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/socicon/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
+  <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3"><link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3" type="text/css">
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
+      display: flex; /* Make body a flex container */
+      height: 100vh; /* Full viewport height */
+      flex-direction: column; /* Adicionado para que o header fique no topo e o conteúdo abaixo */
+    }
+
+    .main-content-wrapper { /* Novo wrapper para o sidebar e main-chat-area */
+        display: flex;
+        flex-grow: 1; /* Permite que ocupe o espaço restante */
+    }
+
+    .sidebar {
+      width: 250px; /* Width of the conversation list sidebar */
+      background-color: #f0f2f5;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+
+    .sidebar h3 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .conversation-list a {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: background-color 0.2s;
+    }
+
+    .conversation-list a:hover {
+      background-color: #e9e9e9;
+    }
+
+    .conversation-list .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+
+    .main-chat-area {
+      flex-grow: 1; /* Take remaining space */
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
     }
 
     .chat-header {
@@ -18,6 +90,7 @@
       background-color: #0084ff;
       color: white;
       padding: 10px 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .chat-header img {
@@ -28,18 +101,11 @@
       object-fit: cover;
     }
 
-    .chat-container {
-      height: calc(100vh - 70px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 15px;
-    }
-
     .messages {
       flex-grow: 1;
       overflow-y: auto;
-      margin-bottom: 10px;
+      padding: 15px;
+      background-color: #f0f2f5; /* Chat background color */
     }
 
     .message {
@@ -47,24 +113,48 @@
       max-width: 60%;
       padding: 10px;
       border-radius: 10px;
-      background-color: #e1ffc7;
+      word-wrap: break-word; /* Ensure long words wrap */
     }
 
-    .message.me {
+    .message.mine { /* Messages sent by the current user */
       margin-left: auto;
-      background-color: #d2e3ff;
+      background-color: #d2e3ff; /* Blue-ish */
+      text-align: right;
+    }
+
+    .message.other { /* Messages from the artist */
+      margin-right: auto;
+      background-color: #e1ffc7; /* Green-ish */
+      text-align: left;
+    }
+
+    .message .sender {
+      font-size: 0.8em;
+      color: #555;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .message .timestamp {
+      font-size: 0.7em;
+      color: #777;
+      margin-top: 5px;
+      display: block;
     }
 
     .chat-input {
       display: flex;
+      padding: 15px;
+      border-top: 1px solid #eee;
+      background-color: #fff;
     }
 
-    .chat-input input {
+    .chat-input input[type="text"] {
       flex: 1;
       padding: 10px;
       border-radius: 20px;
       border: 1px solid #ccc;
       outline: none;
+      font-size: 1em;
     }
 
     .chat-input button {
@@ -75,37 +165,101 @@
       color: white;
       border-radius: 20px;
       cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.2s;
+    }
+
+    .chat-input button:hover {
+      background-color: #0066cc;
+    }
+
+    .no-conversations {
+      padding: 20px;
+      text-align: center;
+      color: #777;
     }
   </style>
 </head>
 <body>
-  <h2>Conversando com {{ nome_artista|title }}</h2>
-
-  <!-- Cabeçalho do chat -->
-  <div class="chat-header">
-    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Perfil">
-    <h2>{{ nome_artista }}</h2>
-  </div>
-
-  <!-- Conteúdo do chat -->
-  <div class="chat-container">
-    <div class="messages">
-      {% for msg in mensagens %}
-        <div class="message {% if msg.autor == 'cliente' %}me{% endif %}">
-          {{ msg.texto }}
+  
+  <section data-bs-version="5.1" class="menu menu1 cid-uKcyTKGA6v" once="menu" id="menu1-y">
+    <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
+        <div class="container">
+            <div class="navbar-brand">
+                <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="{% url 'index' %}">InkEtrom</a></span>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'index' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'artistas' %}">Artistas</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'chat' %}">Chats</a>
+                    </li><li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'user_preview' %}"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li></ul>
+            </div>
         </div>
-      {% empty %}
-        <p class="text-muted">Nenhuma mensagem ainda.</p>
-      {% endfor %}
+    </nav>
+</section>
+<div class="main-content-wrapper">
+  <div class="sidebar">
+    <h3>Suas Conversas</h3>
+    <div class="conversation-list">
+      {% if conversas_do_usuario %}
+        {% for conversa in conversas_do_usuario %}
+          <a href="{% url 'chat_com_artista' conversa.artista.id %}">
+            <img class="profile-pic" src="https://via.placeholder.com/40" alt="Foto de Perfil"> <span>{{ conversa.artista.primeiro_nome }} {{ conversa.artista.sobre_nome }}</span>
+          </a>
+        {% endfor %}
+      {% else %}
+        <p class="no-conversations">Nenhuma conversa iniciada.</p>
+        <p class="no-conversations">Para iniciar uma conversa, vá para <a href="{% url 'artistas' %}">Artistas</a> e clique no ícone de chat.</p>
+      {% endif %}
     </div>
-    
-    <form method="post" class="chat-input">
-      {% csrf_token %}
-      {{ form.texto }}
-      {{ form.autor }}
-      <button type="submit">Enviar</button>
-    </form>
   </div>
 
-</body>
+  <div class="main-chat-area">
+    {% if artista_selecionado %}
+      <div class="chat-header">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Perfil"> <h2>{{ artista_selecionado.primeiro_nome }} {{ artista_selecionado.sobre_nome }}</h2>
+      </div>
+
+      <div class="messages">
+        {% for msg in mensagens %}
+          <div class="message {% if msg.remetente.id == current_user_id %}mine{% else %}other{% endif %}">
+            <div class="sender">
+              {% if msg.remetente.id == current_user_id %}
+                Você
+              {% else %}
+                {{ artista_selecionado.primeiro_nome }}
+              {% endif %}
+            </div>
+            {{ msg.texto }}
+            <span class="timestamp">{{ msg.timestamp|date:"H:i" }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <form method="post" class="chat-input">
+        {% csrf_token %}
+        {{ form.texto }}
+        <button type="submit">Enviar</button>
+      </form>
+    {% else %}
+      <div class="no-conversations">
+        <h2>Selecione uma conversa ou inicie uma nova.</h2>
+        <p>Clique em um artista na lista ao lado para ver ou iniciar um chat.</p>
+      </div>
+    {% endif %}
+  </div>
+</div> <script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/ytplayer/index.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/navbar-dropdown.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
+  </body>
 </html>
