@@ -1,9 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import PerfilUsuario, CadastroTatuador, Mensagem
+from .models import PerfilUsuario, CadastroTatuador, Mensagem, Conversa # Import Conversa
 from .forms import MensagemForm, CadastroUsuarioForm, LoginForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
+from django import forms
+from django.utils import timezone
+
 
 # Create your views here.
 
@@ -17,7 +22,7 @@ def cadastrar_pessoa(request):
             user = form.save()
             messages.success(request, 'Cadastro realizado com sucesso!')
             login(request, user)  # Faz login automático após cadastro
-            return redirect('sucesso')
+            return redirect('user_preview')
     else:
         form = CadastroUsuarioForm()
 
@@ -33,7 +38,7 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)
-                return redirect('sucesso')
+                return redirect('user_preview')
             else:
                 messages.error(request, 'Nome de usuário ou senha incorretos.')
     else:
@@ -45,22 +50,44 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-def chat_view(request):
-    mensagens = Mensagem.objects.order_by('timestamp')
+@login_required
+def chat_view(request, artista_id=None):
+    user = request.user
+    conversas_do_usuario = Conversa.objects.filter(usuario=user).order_by('-ultima_atualizacao')
     
-    if request.method == 'POST':
+    current_conversa = None
+    artista_selecionado = None
+    mensagens = []
+    
+    if artista_id:
+        artista_selecionado = get_object_or_404(CadastroTatuador, id=artista_id)
+        current_conversa, created = Conversa.objects.get_or_create(
+            usuario=user,
+            artista=artista_selecionado
+        )
+        mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
+
+    if request.method == "POST" and current_conversa: # Only allow sending messages if a chat is selected
         form = MensagemForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('chat')
+            nova_msg = form.save(commit=False)
+            nova_msg.conversa = current_conversa
+            nova_msg.remetente = user # The logged-in user is the sender
+            nova_msg.save()
+            current_conversa.ultima_atualizacao = timezone.now() # Update conversation timestamp
+            current_conversa.save()
+            return redirect('chat_com_artista', artista_id=artista_id) # Redirect to the specific chat
     else:
-        form = MensagemForm(initial={'autor': 'cliente'})  # ou 'tatuador'
+        form = MensagemForm()
 
     return render(request, 'aplicativo/chat.html', {
-        'mensagens': mensagens,
-        'form': form,
-        'contato_nome': 'Maria Clara',  # opcional: pode ser dinâmico
-    })
+    'conversas_do_usuario': conversas_do_usuario,
+    'artista_selecionado': artista_selecionado,
+    'mensagens': mensagens,
+    'form': form,
+    'current_user_id': user.id,
+})
+
 
 def carol_view(request):
     return render(request, 'aplicativo/carol.html')
@@ -72,23 +99,34 @@ def natalia_view(request):
     return render(request, 'aplicativo/natalia.html')
 
 def artistas_view(request):
-    return render(request, 'aplicativo/artistas.html')
+    artistas = CadastroTatuador.objects.all() # Fetch all artists
+    return render(request, 'aplicativo/artistas.html', {'artistas': artistas})
 
 def termos_view(request):
     return render(request, 'aplicativo/termos_privacidade.html')
 
-@login_required(login_url='login')
-def user_preview(request):
-    try:
-        perfil = request.user.perfil
-        context = {
-            'usuario': request.user,
-            'perfil': perfil
-        }
-    except:
-        context = {
-            'usuario': request.user,
-            'perfil': None
-        }
+def sucesso(request):
+    return render(request, 'sucesso.html')
+
+class EditarNomeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+@login_required
+def editar_nome(request):
+    if request.method == 'POST':
+        form = EditarNomeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_preview')  # redireciona para a página do perfil
+    else:
+        form = EditarNomeForm(instance=request.user)
     
-    return render(request, 'aplicativo/user_preview.html', context)
+    return render(request, 'aplicativo/editar_nome.html', {'form': form})
+
+@login_required
+def user_preview(request):
+    return render(request, 'aplicativo/user_preview.html', {
+        'usuario': request.user  # envia o usuário logado com o nome atualizado
+    })

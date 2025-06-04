@@ -1,12 +1,17 @@
 from django.urls import path
-from django.shortcuts import render
 from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
     path('cadastro/', views.cadastrar_pessoa, name='cadastro'),
-    path('sucesso/', views.user_preview, name='sucesso'),
-    path('chat/', views.chat_view, name='chat'),
+    path('user-preview/', views.user_preview, name='user_preview'),
+    path('user/', views.sucesso, name='sucesso'),
+    path('editar-nome/', views.editar_nome, name='editar_nome'),
+    
+    # Updated chat URLs
+    path('chat/', views.chat_view, name='chat'), # Lists conversations
+    path('chat/<int:artista_id>/', views.chat_view, name='chat_com_artista'), # Specific chat with artist
+    
     path('carol/', views.carol_view, name='carol'),
     path('lucas/', views.lucas_view, name='lucas'),
     path('natalia/', views.natalia_view, name='natalia'),

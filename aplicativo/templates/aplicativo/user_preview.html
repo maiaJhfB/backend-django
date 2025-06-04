@@ -50,7 +50,7 @@
                 <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'index' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'artistas' %}">Artistas</a></li>
                     <li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'chat' %}">Chats</a>
-                    </li><li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'sucesso' %}"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li></ul>
+                    </li><li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'user_preview' %}"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li></ul>
                 
                 
             </div>
@@ -73,7 +73,14 @@
             </div>
             <div class="col-12 col-md">
                 <div class="text-wrapper">
-                    <p class="mbr-text mbr-fonts-style mb-4 display-7"><strong>Nome de cadastro</strong>: Ana Carolina Joaquim Januário.<br><br><strong>Telefone</strong>: (11) 989665866.&nbsp;<br><br><strong>Localização</strong>: São Paulo - SP<br><strong><br>E-mail</strong>: anajoaquimjanuario7@gmail.com<br><br></p>
+                    <p class="mbr-text mbr-fonts-style mb-4 display-7">
+                        <strong>Nome de cadastro</strong>: {{ usuario.first_name }} {{ usuario.last_name }}
+                        <a href="{% url 'editar_nome' %}" class="btn btn-sm btn-outline-primary ms-2">Editar nome</a><br><br>
+                    </p>
+                    <p class="name mbr-fonts-style mb-1 display-4">
+                        <strong>E-mail:</strong> mateus@gmail.com</p>
+                    </p>
+
                     <p class="name mbr-fonts-style mb-1 display-4">
                         <strong>Cadastrada há 10 meses.</strong></p>
                     <p class="position mbr-fonts-style display-4"><strong>Total de compras: </strong>10 compras.&nbsp;</p>
