@@ -53,51 +53,6 @@ projeto/
 └── manage.py
 ```
 
-## Alterações Realizadas
-
-1. **Correção de Caminhos de Assets**: Todos os arquivos HTML foram atualizados para usar as tags do Django para arquivos estáticos:
-   - Adicionado `{% load static %}` no topo de cada arquivo HTML
-   - Substituído caminhos relativos como `assets/...` por `{% static 'assets/...' %}`
-   - Atualizado links de navegação para usar `{% url 'nome_da_view' %}` em vez de links diretos
-
-2. **Correção do EmailField**: Corrigido o erro no arquivo forms.py, alterando o argumento posicional para nomeado:
-   ```python
-   # Código com erro:
-   email = forms.EmailField("Seu email", max_length=250)
-   
-   # Código corrigido:
-   email = forms.EmailField(label="Seu email", max_length=250)
-   ```
-
-3. **Configuração de Arquivos Estáticos**: Configurado o Django para servir arquivos estáticos corretamente:
-   - Adicionado configurações em settings.py
-   - Criado diretório static/ na raiz do projeto
-   - Copiado assets para o diretório static/
-
-4. **Integração de Formulários**: Ajustado os formulários para funcionarem corretamente com o Django:
-   - Adicionado {% csrf_token %} nos formulários
-   - Configurado campos para corresponder aos modelos
-
-5. **Rotas e Views**: Implementado todas as rotas e views necessárias para as páginas HTML:
-   - Corrigido urlpatterns em urls.py
-   - Criado views para cada página HTML
-   - Implementado lógica para processamento de formulários
-
-## Como Executar o Projeto
-
-1. Descompacte o arquivo zip
-2. Navegue até o diretório do projeto: `cd nao/projeto`
-3. Execute as migrações:
-   ```
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-4. Inicie o servidor:
-   ```
-   python manage.py runserver
-   ```
-5. Acesse: http://127.0.0.1:8000/
-
 ## Rotas Disponíveis
 
 - `/` - Página inicial
