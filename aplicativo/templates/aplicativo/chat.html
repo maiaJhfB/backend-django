@@ -265,7 +265,7 @@
         {% csrf_token %}
         {{ form.texto }}
         <button type="submit">Enviar</button>
-        <button type="button" class="payment-button" onclick="alert('Funcionalidade de pagamento em desenvolvimento!')">$</button>
+        <button type="button" class="payment-button" onclick="window.open('https://link.mercadopago.com.br/matwon', '_blank');">$</button>
       </form>
     {% else %}
       <div class="no-conversations">
