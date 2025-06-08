@@ -9,7 +9,7 @@ class PerfilUsuario(models.Model):
     primeiro_nome = models.CharField("Seu primeiro nome", max_length=50)
     sobre_nome = models.CharField("Seu sobrenome", max_length=50)
     data_cadastro = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         return f"{self.primeiro_nome} {self.sobre_nome}"
 
@@ -19,6 +19,10 @@ class CadastroTatuador(models.Model):
     sobre_nome = models.CharField("Seu sobrenome", max_length=50)
     email = models.EmailField("Seu email", max_length=250)
     nome_estudio = models.CharField("Nome do seu estúdio", max_length=50)
+    
+    # NOVOS CAMPOS ADICIONADOS AQUI
+    bio = models.TextField("Bio do artista", blank=True, null=True, help_text="Uma breve descrição sobre o artista e seu estilo.")
+    foto_perfil = models.ImageField("Foto de Perfil", upload_to='artistas_fotos/', blank=True, null=True, help_text="Foto de perfil do artista.")
 
     def __str__(self):
         return f"{self.primeiro_nome} {self.sobre_nome} - {self.nome_estudio}"
@@ -36,11 +40,10 @@ class Conversa(models.Model):
         return f"Conversa entre {self.usuario.username} e {self.artista.primeiro_nome} {self.artista.sobre_nome}"
 
 class Mensagem(models.Model):
-    # Adicione null=True, blank=True para permitir valores nulos temporariamente
     conversa = models.ForeignKey(Conversa, on_delete=models.CASCADE, related_name='mensagens', null=True, blank=True)
     remetente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mensagens_enviadas', null=True, blank=True)
     texto = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         return f"{self.remetente.username}: {self.texto[:30]}..."

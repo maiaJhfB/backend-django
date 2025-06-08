@@ -52,12 +52,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'projeto.urls'
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # adiciona a pasta templates da raiz do projeto
+        'DIRS': [BASE_DIR / 'templates'],    # adiciona a pasta templates da raiz do projeto
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,9 +121,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# Media files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Media files (for user uploads like profile pictures)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

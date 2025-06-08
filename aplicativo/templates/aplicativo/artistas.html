@@ -91,7 +91,14 @@
                 <div class="row align-items-center">
                     <div class="col-12 col-md-3">
                         <div class="image-wrapper">
-                            <img src="{% static 'assets/images/mbr-815x565.jpg' %}" alt="Foto do Artista">
+                            {% if artista.primeiro_nome == 'Nathalia' %}
+                                <img src="{% static 'assets/images/mbr-815x565.jpg' %}" alt="Foto de Perfil de Nathalia">
+                            {% elif artista.primeiro_nome == 'Carolina' %}
+                                <img src="{% static 'assets/images/mbr-375x250.jpg' %}" alt="Foto de Perfil de Carolina">
+                            {% elif artista.primeiro_nome == 'Lucas' %}
+                                <img src="{% static 'assets/images/mbr-815x611.jpg' %}" alt="Foto de Perfil de Lucas">
+                            {% else %}
+                                <img src="{% static 'assets/images/default_artist_pic.jpg' %}" alt="Foto padrão de artista"> {% endif %}
                         </div>
                     </div>
                     <div class="col-12 col-md">
@@ -99,10 +106,14 @@
                             <h5 class="card-title mbr-fonts-style m-0 mb-3 display-5"><strong>{{ artista.primeiro_nome }} {{ artista.sobre_nome }}</strong></h5>
                             <h6 class="card-subtitle mbr-fonts-style mb-3 display-4">
                                 <strong>Tatuador(a) há X anos.
-                                </strong><div><strong>{{ artista.nome_estudio }} - SP</strong></div>
+                                </strong><div><strong>{{ artista.nome_estudio }}</strong></div>
                             </h6>
                             <p class="mbr-text mbr-fonts-style display-7">
-                                Descrição do artista aqui.
+                                {% if artista.bio %}
+                                    {{ artista.bio }}
+                                {% else %}
+                                    Este artista ainda não adicionou uma biografia.
+                                {% endif %}
                             </p>
                             <div class="social-row display-7">
                                 <div class="soc-item">

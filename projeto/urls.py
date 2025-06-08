@@ -18,13 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from aplicativo import views # Importa as views do seu aplicativo
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('aplicativo.urls')),
+    path('admin/', admin.site.urls), # Uma única entrada para o admin
+    path("", views.index, name="index"), # A URL raiz para a página inicial
+    path("", include("aplicativo.urls")), # Inclui o restante das URLs do seu aplicativo
 ]
 
-# Adicionar configuração para servir arquivos estáticos em desenvolvimento
+# Adicionar configuração para servir arquivos de mídia e estáticos em desenvolvimento
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) # Serve também static
