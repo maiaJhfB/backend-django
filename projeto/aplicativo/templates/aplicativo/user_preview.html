@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html  >
 <head>
@@ -5,22 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Mobirise v6.0.1, mobirise.com">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-  <link rel="shortcut icon" href="assets/images/pngtree-colorful-lion-portrait-for-tattoo-logo-and-decor-vector-png-image-35388436.jpg-128x128.png" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'assets/images/pngtree-colorful-lion-portrait-for-tattoo-logo-and-decor-vector-png-image-35388436.jpg-128x128.png' %}" type="image/x-icon">
   <meta name="description" content="">
   
   
   <title>Página do usuário</title>
-  <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="assets/web/assets/gdpr-plugin/gdpr-styles.css">
-  <link rel="stylesheet" href="assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="assets/socicon/css/styles.css">
-  <link rel="stylesheet" href="assets/theme/css/style.css">
+  <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons2/mobirise2.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/web/assets/gdpr-plugin/gdpr-styles.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/socicon/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
   <link rel="preload" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
-  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=J3AAwa"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=J3AAwa" type="text/css">
+  <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=J3AAwa"><link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=J3AAwa" type="text/css">
 
   
   
@@ -35,7 +36,7 @@
         <div class="container">
             <div class="navbar-brand">
                 
-                <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="page3.html">InkEtrom</a></span>
+                <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="{% url 'index' %}">InkEtrom</a></span>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <div class="hamburger">
@@ -46,10 +47,10 @@
                 </div>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="page3.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="page1.html">Artistas</a></li>
-                    <li class="nav-item"><a class="nav-link link text-black display-4" href="https://mobiri.se">Chats</a>
-                    </li><li class="nav-item"><a class="nav-link link text-black display-4" href="https://mobiri.se"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li></ul>
+                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'index' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'artistas' %}">Artistas</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'chat' %}">Chats</a>
+                    </li><li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'sucesso' %}"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li></ul>
                 
                 
             </div>
@@ -67,7 +68,7 @@
         <div class="row align-items-center">
             <div class="col-12 col-md-6">
                 <div class="image-wrapper">
-                    <img src="assets/images/background13.jpg" alt="Mobirise Website Builder">
+                    <img src="{% static 'assets/images/background13.jpg' %}" alt="Mobirise Website Builder">
                 </div>
             </div>
             <div class="col-12 col-md">
@@ -81,6 +82,11 @@
         </div>
     </div>
   
+<script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/ytplayer/index.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/navbar-dropdown.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
   
 <input name="cookieData" type="hidden" data-cookie-cookiesAlertType='1' data-cookie-customDialogSelector='null' data-cookie-colorText='#424a4d' data-cookie-colorBg='rgb(255, 255, 255)' data-cookie-opacityOverlay='0' data-cookie-bgOpacity='100' data-cookie-textButton='Entendi!' data-cookie-rejectText='REJECT' data-cookie-colorButton='#a95b18' data-cookie-rejectColor='#ffffff' data-cookie-colorLink='#ff9966' data-cookie-underlineLink='true' data-cookie-text="Nós usamos cookies para melhorar a sua experiência de usuário. <a href='privacy.html'>cookie policy</a>.">
   </body>
