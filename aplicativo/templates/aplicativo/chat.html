@@ -232,13 +232,19 @@
     /*-- Estilos da Sidebar Colapsável --*/
 
     .sidebar {
-      /* ...seus estilos de width, background, etc... */
-      transition: margin-left 0.35s ease; /* A animação! */
-      margin-left: 0; /* Posição inicial */
+      width: 250px;
+      background-color: #f0f2f5;
+      padding: 15px;
+      overflow-y: auto;
+      transition: margin-left 0.35s ease;
+      margin-left: 0;
+      /* A MÁGICA DA BARRA DIVISORA */
+      border-right: 1px solid #ddd;
     }
 
     .sidebar.collapsed {
-      margin-left: -265px; /* Empurra pra esquerda pra sumir (largura + um pouco) */
+      margin-left: -266px; /* Largura + 1px da borda */
+      border-right: none; /* Esconde a borda quando fechado */
     }
 
     .sidebar-header {
@@ -302,7 +308,7 @@
       {% if conversas_do_usuario %}
         {% for conversa in conversas_do_usuario %}
           <a href="{% url 'chat_com_artista' conversa.artista.id %}">
-            <img class="profile-pic" src="https://via.placeholder.com/40" alt="Foto de Perfil"> <span>{{ conversa.artista.primeiro_nome }} {{ conversa.artista.sobre_nome }}</span>
+            <img class="profile-pic" src="{% static 'assets/images/dafault1.png' %}" alt="Foto de Perfil"> <span>{{ conversa.artista.primeiro_nome }} {{ conversa.artista.sobre_nome }}</span>
           </a>
         {% endfor %}
       {% else %}
@@ -315,7 +321,7 @@
   <div class="main-chat-area">
     {% if artista_selecionado %}
       <div class="chat-header">
-        <button class="open-btn">&#9776;</button> <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Perfil"> 
+        <button class="open-btn">&#9776;</button> <img src="{% static 'assets/images/dafault1.png' %}" alt="Foto de Perfil Padrão"> 
         <h2>{{ artista_selecionado.primeiro_nome }} {{ artista_selecionado.sobre_nome }}</h2>
       </div>
 

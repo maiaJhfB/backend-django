@@ -28,25 +28,56 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
+      overflow: hidden; /* Previne scroll do body principal */
     }
 
     .main-content-wrapper {
         display: flex;
         flex-grow: 1;
-        padding-top: 10px; /* FIX: EMPURRA O CONTEÚDO PRA BAIXO DA NAVBAR */
+        padding-top: 10px;
+        height: calc(100vh - 80px); /* Ajusta altura para descontar a navbar */
     }
 
+    /*-- Estilos da Sidebar e da Barra Divisora --*/
     .sidebar {
       width: 250px;
+      min-width: 250px;
       background-color: #f0f2f5;
       padding: 15px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
       overflow-y: auto;
+      transition: margin-left 0.35s ease;
+      margin-left: 0;
+      border-right: 1px solid #ddd;
     }
 
-    .sidebar h3 {
-      color: #333;
-      margin-bottom: 20px;
+    .sidebar.collapsed {
+      margin-left: -266px; /* Largura + 1px da borda */
+      border-right: none;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .sidebar-header h3 {
+      margin: 0;
+    }
+    
+    .close-btn, .open-btn {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6c757d;
+      padding: 0 5px;
+    }
+
+    .open-btn {
+        color: #fff;
+        margin-right: 10px;
     }
 
     .conversation-list a {
@@ -64,6 +95,11 @@
 
     .conversation-list a:hover {
       background-color: #e9e9e9;
+    }
+    
+    .conversation-list a.active {
+      background-color: #d2e3ff;
+      border-left: 4px solid #0084ff;
     }
 
     .conversation-list .profile-pic {
@@ -136,13 +172,13 @@
 
     .message .sender {
       font-size: 0.8em;
-      color: #555; /* Cor padrão pro balão dos outros */
+      color: #555;
       margin-bottom: 5px;
       font-weight: bold;
     }
 
     .message.mine .sender {
-        color: #e0e0e0; /* FIX: Cor clara para o "Você" no balão escuro */
+        color: #e0e0e0;
     }
     
     .message .timestamp {
@@ -155,7 +191,7 @@
     /*-- INPUT DE MENSAGEM --*/
     .chat-input {
       display: flex;
-      align-items: center; /* FIX: Alinha tudo na vertical */
+      align-items: center;
       padding: 15px;
       background-color: #f0f2f5;
       border-top: 1px solid #e0e0e0;
@@ -174,7 +210,7 @@
       margin-left: 10px;
       padding: 10px 20px;
       border: none;
-      background-color: #a95b18; /* Cor laranja do site */
+      background-color: #a95b18;
       color: white;
       border-radius: 20px;
       cursor: pointer;
@@ -186,7 +222,6 @@
       background-color: #8b4913;
     }
     
-    /*-- BOTÃO DE ANEXO --*/
     .attach-button {
       display: inline-flex;
       align-items: center;
@@ -208,7 +243,6 @@
         font-size: 1.2rem;
     }
 
-    /*-- OUTROS BOTÕES (COMPRA/CÂMERA) --*/
     .buy-button, .camera-button {
       margin-left: 10px;
       padding: 10px 15px;
@@ -238,7 +272,7 @@
   
   <section data-bs-version="5.1" class="menu menu1 cid-uKcyTKGA6v" once="menu" id="menu1-y">
     <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
-        <div class="container">
+      <div class="container">
             <div class="navbar-brand">
                 <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="{% url 'index' %}">InkEtrom</a></span>
             </div>
@@ -262,14 +296,16 @@
 
 <div class="main-content-wrapper">
   <div class="sidebar">
-    <h3>Conversas com Clientes</h3>
+    <div class="sidebar-header">
+        <h3>Conversas com Clientes</h3>
+        <button class="close-btn">&times;</button>
+    </div>
     <div class="conversation-list">
       {% if conversas_do_artista %}
         {% for conversa in conversas_do_artista %}
-          <a href="{% url 'artist_chat_detail' conversa.id %}" class="conversation-item">
-            <img class="profile-pic" src="https://via.placeholder.com/50" alt="Foto de Perfil do Cliente"> <div class="conversation-info">
-                <h4>{{ conversa.usuario.first_name }} {{ conversa.usuario.last_name }}</h4>
-            </div>
+          <a href="{% url 'artist_chat_detail' conversa.id %}" class="conversation-item {% if conversa.id == active_chat_id %}active{% endif %}">
+            <img class="profile-pic" src="{% static 'assets/images/dafault1.png' %}" alt="Foto de Perfil do Cliente">
+          <span>{{ conversa.usuario.first_name }} {{ conversa.usuario.last_name }}</span>
           </a>
         {% endfor %}
       {% else %}
@@ -281,7 +317,9 @@
   <div class="main-chat-area">
     {% if cliente_chat %}
       <div class="chat-header">
-        <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="Foto de Perfil do Cliente"> <h2>{{ cliente_chat.first_name }} {{ cliente_chat.last_name }}</h2>
+        <button class="open-btn">&#9776;</button>
+        <img src="{% static 'assets/images/dafault1.png' %}" alt="Foto de Perfil do Cliente"> 
+        <h2>{{ cliente_chat.first_name }} {{ cliente_chat.last_name }}</h2>
       </div>
 
       <div class="messages">
@@ -300,7 +338,7 @@
         {% endfor %}
       </div>
       
-      <form method="post" class="chat-input">
+      <form method="post" class="chat-input" enctype="multipart/form-data">
         {% csrf_token %}
 
         <input type="file" id="file-upload" name="attachment" style="display: none;">
@@ -312,7 +350,6 @@
         <button type="submit">Enviar</button>
         
         <button type="button" id="buyButton" class="buy-button" onclick="handleBuyClick()" style="display: none;">Comprar R$500</button>
-      
         <button type="button" onclick="simulateImageSend()" style="background-color: #ffc107; color: black;">Testar Compra</button>
       </form>
     {% else %}
@@ -331,6 +368,7 @@
 <script src="{% static 'assets/theme/js/script.js' %}"></script>
 
 <script>
+    // LÓGICA DO TATUADOR MANTIDA
     function simulateImageSend() {
         console.log("Simulando envio de imagem...");
         const messagesContainer = document.querySelector('.messages');
@@ -353,11 +391,8 @@
         buyButton.textContent = 'Carregando...';
         buyButton.disabled = true;
         buyButton.className = 'buy-button camera-button';
-
         const paymentLink = 'https://link.mercadopago.com.br/matwon';
-        
         window.open(paymentLink, '_blank');
-        
         setTimeout(() => {
             buyButton.innerHTML = '<span class="mobi-mbri mobi-mbri-camera"></span>';
             buyButton.className = 'camera-button';
@@ -367,14 +402,25 @@
 </script>
 
 <script>
-  // espera a página carregar inteira pra rodar o código
+  // SCRIPT DA SIDEBAR E SCROLL AUTOMÁTICO
   document.addEventListener('DOMContentLoaded', function() {
-    // acha a div que segura as mensagens
+    // Scroll automático
     const messagesContainer = document.querySelector('.messages');
-
-    // se a div existir na página, faz a mágica
     if (messagesContainer) {
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Lógica da sidebar colapsável
+    const sidebar = document.querySelector('.sidebar');
+    const openBtn = document.querySelector('.open-btn');
+    const closeBtn = document.querySelector('.close-btn');
+    if (sidebar && openBtn && closeBtn) {
+      openBtn.addEventListener('click', function() {
+        sidebar.classList.remove('collapsed');
+      });
+      closeBtn.addEventListener('click', function() {
+        sidebar.classList.add('collapsed');
+      });
     }
   });
 </script>
