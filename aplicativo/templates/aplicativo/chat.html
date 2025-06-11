@@ -272,19 +272,54 @@
         margin-right: 10px; /* espacinho */
     }
 
-    .message-proposal {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      margin-top: 5px;
-    }
+.message-proposal {
+  display: flex;
+  flex-direction: row; /* alinha em linha */
+  align-items: center;  /* alinha os itens no centro verticalmente */
+  gap: 15px;
+}
 
-    .proposal-image {
-      max-width: 100%;
-      border-radius: 8px;
-    }
+.proposal-image {
+  width: 100%; /* imagem ocupa todo o espaço do seu container */
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+/* um container novo pro texto no meio */
+.proposal-info {
+  text-align: left;
+  color: #333;
+}
+
+.proposal-action {
+  text-align: left;
+}
+
+.message.mine .proposal-info {
+  color: #e0e0e0; /* cor do texto pra vc que envia */
+}
+.proposal-info p {
+  margin: 0;
+  line-height: 1.3;
+}
+.proposal-info .proposal-title {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+.proposal-info .proposal-text {
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+
+/* o container do botão */
+.proposal-action {
+  flex-shrink: 0; /* impede que o botão encolha */
+}
+
+/* pra controlar a largura do balão da proposta */
+.message-type-proposal {
+    max-width: 500px; /* um valor fixo pra ele nao esticar demais */
+}
 
     .proposal-action-button {
       display: inline-flex;
@@ -384,7 +419,7 @@
 
       <div class="messages">
   {% for msg in mensagens %}
-    <div class="message {% if msg.remetente.id == current_user_id %}mine{% else %}other{% endif %}">
+    <div class="message {% if msg.remetente.id == current_user_id %}mine{% else %}other{% endif %} {% if msg.imagem_proposta %}message-type-proposal{% endif %}">
       <div class="sender">
         {% if msg.remetente.id == current_user_id %}
           Você
@@ -394,17 +429,32 @@
       </div>
 
       {% if msg.imagem_proposta %}
-        <div class="message-proposal">
-          <p style="margin: 0; font-size: 0.9em;"><strong>Arte para aprovação:</strong></p>
-          <img class="proposal-image" src="{{ msg.imagem_proposta.url }}" alt="Proposta de Imagem">
-          <div class="proposal-action">
-              <button class="proposal-action-button" onclick="startPurchase(this)">
-                  <span class="timer"></span>
-                  <span class="button-text">Comprar</span>
-                  <span class="spinner"></span>
-              </button>
-          </div>
-        </div>
+        {% if msg.imagem_proposta %}
+  <div class="message-proposal">
+
+    <div class="proposal-image-container">
+      <img class="proposal-image" src="{{ msg.imagem_proposta.url }}" alt="Proposta de Imagem">
+    </div>
+
+    <div class="proposal-details-container">
+      <div class="proposal-info">
+        <p class="proposal-title">Arte para aprovação</p>
+        <p class="proposal-text">Clique para comprar e simular.</p>
+      </div>
+
+      <div class="proposal-action">
+          <button class="proposal-action-button" onclick="startPurchase(this)">
+              <span class="timer"></span>
+              <span class="button-text">Comprar</span>
+              <span class="spinner"></span>
+          </button>
+      </div>
+    </div>
+
+  </div>
+{% else %}
+  {{ msg.texto }}
+{% endif %}
       {% else %}
         {{ msg.texto }}
       {% endif %}

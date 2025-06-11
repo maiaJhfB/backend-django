@@ -25,54 +25,29 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
+      display: flex; /* Make body a flex container */
+      height: 100vh; /* Full viewport height */
+      flex-direction: column; /* Adicionado para que o header fique no topo e o conteúdo abaixo */
     }
 
-    .main-content-wrapper {
+    .main-content-wrapper { /* Novo wrapper para o sidebar e main-chat-area */
         display: flex;
-        flex-grow: 1;
-        height: calc(100vh - 70px);
+        flex-grow: 1; /* Permite que ocupe o espaço restante */
         padding-top: 10px;
     }
 
     .sidebar {
-      width: 250px;
-      min-width: 250px;
+      width: 250px; /* Width of the conversation list sidebar */
       background-color: #f0f2f5;
       padding: 15px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
       overflow-y: auto;
-      transition: margin-left 0.35s ease;
-      margin-left: 0;
-      border-right: 1px solid #ddd;
     }
 
-    .sidebar.collapsed {
-      margin-left: -266px;
-      border-right: none;
+    .sidebar h3 {
+      color: #333;
+      margin-bottom: 20px;
     }
-
-    .sidebar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .sidebar-header h3 { margin: 0; }
-
-    .close-btn, .open-btn {
-      background: transparent;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: #6c757d;
-      padding: 0 5px;
-    }
-
-    .open-btn { color: #fff; margin-right: 10px; }
 
     .conversation-list a {
       display: flex;
@@ -83,14 +58,12 @@
       border-radius: 8px;
       text-decoration: none;
       color: #333;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       transition: background-color 0.2s;
     }
 
-    .conversation-list a:hover { background-color: #e9e9e9; }
-
-    .conversation-list a.active {
-      background-color: #d2e3ff;
-      border-left: 4px solid #0084ff;
+    .conversation-list a:hover {
+      background-color: #e9e9e9;
     }
 
     .conversation-list .profile-pic {
@@ -102,7 +75,7 @@
     }
 
     .main-chat-area {
-      flex-grow: 1;
+      flex-grow: 1; /* Take remaining space */
       display: flex;
       flex-direction: column;
       background-color: #fff;
@@ -114,69 +87,90 @@
       background-color: #232323;
       color: white;
       padding: 10px 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .chat-header img {
-      width: 45px !important;
-      height: 45px !important;
+      width: 45px !important;      /* FORÇA a largura ser 45px */
+      height: 45px !important;     /* FORÇA a altura ser 45px */
+      min-width: 45px;             /* Garante que a largura nunca seja menor que 45px */
+      min-height: 45px;            /* Garante que a altura nunca seja menor que 45px */
       border-radius: 50%;
       object-fit: cover;
       margin-right: 15px;
     }
 
-    .chat-header h2 { margin: 0; }
+    .chat-header h2 {
+      margin: 0;
+    }
 
     .messages {
       flex-grow: 1;
       overflow-y: auto;
       padding: 15px;
-      background-color: #f0f2f5;
+      background-color: #f0f2f5; /* Chat background color */
     }
 
     .message {
-      display: flex;
-      flex-direction: column;
       margin-bottom: 10px;
       max-width: 60%;
       padding: 10px;
       border-radius: 10px;
-      word-wrap: break-word;
+      word-wrap: break-word; /* Ensure long words wrap */
     }
 
-    .message.mine {
+    .message.mine { /* Messages sent by the current user */
       margin-left: auto;
-      background-color: #4a4a4a;
-      color: #ffffff;
-      align-items: flex-end;
+      background-color: #4a4a4a; /* <--- um cinza médio */
+      color: #ffffff; /* <--- texto branco pra ler melhor */
+      text-align: right;
     }
 
-    .message.other {
+    .message.other { /* Messages from the artist */
       margin-right: auto;
-      background-color: #e1ffc7;
-      align-items: flex-start;
+      background-color: #e1ffc7; /* Green-ish */
+      text-align: left;
     }
 
     .message .sender {
       font-size: 0.8em;
-      color: #555;
+      color: #b6b6b6;
       margin-bottom: 5px;
       font-weight: bold;
     }
-    .message.mine .sender { color: #e0e0e0; }
-
     .message .timestamp {
       font-size: 0.7em;
-      color: #999;
+      color: #777;
       margin-top: 5px;
+      display: block;
     }
-    .message.mine .timestamp { color: #ccc; }
 
     .chat-input {
       display: flex;
+      padding: 15px; /* um padding pra ficar mais bonito */
+      background-color: #f0f2f5; /* a mesma cor de fundo das mensagens */
+      border-top: 1px solid #e0e0e0; /* uma linha fina pra separar */
+    }
+
+    /* Estilo para o novo botão de pagamento */
+    .chat-input .payment-button {
+      margin-left: 10px;
+      padding: 10px 15px; /* Ajuste o padding para o ícone */
+      border: none;
+      background-color: #28a745; /* Uma cor verde para pagamento */
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1.2em; /* Tamanho maior para o ícone */
+      font-weight: bold;
+      transition: background-color 0.2s;
+      display: flex;
       align-items: center;
-      padding: 15px;
-      background-color: #f0f2f5;
-      border-top: 1px solid #e0e0e0;
+      justify-content: center;
+    }
+
+    .chat-input .payment-button:hover {
+      background-color: #218838;
     }
 
     .chat-input input[type="text"] {
@@ -192,41 +186,136 @@
       margin-left: 10px;
       padding: 10px 20px;
       border: none;
-      background-color: #a95b18;
+      background-color: #a95b18; /* <--- trocado! */
       color: white;
       border-radius: 20px;
       cursor: pointer;
       font-size: 1em;
-    }
-    
-    .test-proposal-button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      background-color: #ffc107;
-      color: black;
-      border-radius: 20px;
-      border: none;
-      cursor: pointer;
-      font-size: 1em;
-      font-family: Arial, sans-serif;
-      font-weight: normal;
-      white-space: nowrap;
-      line-height: normal;
+      transition: background-color 0.2s;
     }
 
-    .message-proposal {
-      display: flex;
-      flex-direction: column;
+    .chat-input button:hover {
+      background-color: #0066cc;
+    }
+
+    .no-conversations {
+      padding: 20px;
+      text-align: center;
+      color: #777;
+    }
+
+    .attach-button {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      width: 100%;
-      margin-top: 5px;
+      justify-content: center;
+      padding: 10px;
+      margin-right: 10px; /* espacinho antes do campo de texto */
+      background-color: #6c757d; /* um cinza neutro */
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
     }
 
-    .proposal-image {
-      max-width: 100%;
-      border-radius: 8px;
+    .attach-button:hover {
+      background-color: #5a6268;
     }
+
+    .attach-button .mbr-iconfont {
+        font-size: 1.2rem;
+    }
+
+    /*-- Estilos da Sidebar Colapsável --*/
+
+    .sidebar {
+      width: 250px;
+      background-color: #f0f2f5;
+      padding: 15px;
+      overflow-y: auto;
+      transition: margin-left 0.35s ease;
+      margin-left: 0;
+      /* A MÁGICA DA BARRA DIVISORA */
+      border-right: 1px solid #ddd;
+    }
+
+    .sidebar.collapsed {
+      margin-left: -266px; /* Largura + 1px da borda */
+      border-right: none; /* Esconde a borda quando fechado */
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .sidebar-header h3 {
+      margin: 0; /* Remove margem do título */
+    }
+
+    .close-btn, .open-btn {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6c757d; /* cor do botão */
+      padding: 0 5px;
+    }
+
+    .open-btn {
+        color: #fff; /* cor do botão no header escuro */
+        margin-right: 10px; /* espacinho */
+    }
+
+.message-proposal {
+  display: flex;
+  flex-direction: row; /* alinha em linha */
+  align-items: center;  /* alinha os itens no centro verticalmente */
+  gap: 15px;
+}
+
+.proposal-image {
+  width: 100%; /* imagem ocupa todo o espaço do seu container */
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+/* um container novo pro texto no meio */
+.proposal-info {
+  text-align: left;
+  color: #333;
+}
+
+.proposal-action {
+  text-align: left;
+}
+
+.message.mine .proposal-info {
+  color: #e0e0e0; /* cor do texto pra vc que envia */
+}
+.proposal-info p {
+  margin: 0;
+  line-height: 1.3;
+}
+.proposal-info .proposal-title {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+.proposal-info .proposal-text {
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+
+/* o container do botão */
+.proposal-action {
+  flex-shrink: 0; /* impede que o botão encolha */
+}
+
+/* pra controlar a largura do balão da proposta */
+.message-type-proposal {
+    max-width: 500px; /* um valor fixo pra ele nao esticar demais */
+}
 
     .proposal-action-button {
       display: inline-flex;
@@ -334,16 +423,23 @@
 
             {% if msg.imagem_proposta %}
               <div class="message-proposal">
-                <p style="margin: 0; font-size: 0.9em;"><strong>Arte para aprovação:</strong></p>
-                <img class="proposal-image" src="{{ msg.imagem_proposta.url }}" alt="Proposta de Imagem">
-                <div class="proposal-action">
-                    <button class="proposal-action-button" onclick="startPurchase(this)">
-                        <span class="timer"></span>
-                        <span class="button-text">Comprar</span>
-                        <span class="spinner"></span>
-                    </button>
+                  <div class="proposal-image-container">
+                    <img class="proposal-image" src="{{ msg.imagem_proposta.url }}" alt="Proposta de Imagem">
+                  </div>
+                  <div class="proposal-details-container">
+                    <div class="proposal-info">
+                      <p class="proposal-title">Arte para aprovação</p>
+                      <p class="proposal-text">Clique para comprar e simular.</p>
+                    </div>
+                    <div class="proposal-action">
+                        <button class="proposal-action-button" onclick="startPurchase(this)">
+                            <span class="timer"></span>
+                            <span class="button-text">Comprar</span>
+                            <span class="spinner"></span>
+                        </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
             {% else %}
               {{ msg.texto }}
             {% endif %}
@@ -366,7 +462,7 @@
         <button type="submit">Enviar</button>
         <button type="submit" name="action" value="test_proposal" class="test-proposal-button" style="background-color: #ffc107; color: black; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer;">Testar Compra</button>
     </form>
-    
+
     {% else %}
       <div class="no-conversations">
         <h2>Selecione uma conversa.</h2>
