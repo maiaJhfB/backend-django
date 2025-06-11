@@ -1,3 +1,4 @@
+# aplicativo/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -7,8 +8,8 @@ from .forms import MensagemForm, CadastroUsuarioForm, LoginForm
 from django.contrib.auth.models import User
 from django import forms
 from django.utils import timezone
+import subprocess
 
-# Função auxiliar para verificar se o usuário é um artista
 def is_artist_check(user):
     return hasattr(user, 'tatuador') and user.tatuador is not None
 
@@ -112,42 +113,55 @@ def artist_chats_list(request):
         'is_artist': True
     })
 
+# aplicativo/views.py
+
+# aplicativo/views.py
+
+# aplicativo/views.py
+
 @login_required
-@user_passes_test(is_artist_check, login_url='/login/') # Redireciona se não for artista
+@user_passes_test(is_artist_check, login_url='/login/')
 def artist_chat_detail(request, conversa_id):
-    # Esta view exibe o chat específico entre o artista logado e um cliente
     user = request.user
     tatuador_perfil = get_object_or_404(CadastroTatuador, usuario=user)
-    
-    # Garante que a conversa pertence ao artista logado
     current_conversa = get_object_or_404(Conversa, id=conversa_id, artista=tatuador_perfil)
-    
-    # O "outro lado" da conversa é o cliente
-    cliente_chat = current_conversa.usuario 
+    conversas_do_artista = Conversa.objects.filter(artista=tatuador_perfil).order_by('-ultima_atualizacao')
+    cliente_chat = current_conversa.usuario
     mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
+    form = MensagemForm()
 
     if request.method == "POST":
-        form = MensagemForm(request.POST)
-        if form.is_valid():
-            nova_msg = form.save(commit=False)
-            nova_msg.conversa = current_conversa
-            nova_msg.remetente = user # O remetente é o artista logado
-            nova_msg.save()
-            current_conversa.ultima_atualizacao = timezone.now()
-            current_conversa.save()
-            return redirect('artist_chat_detail', conversa_id=conversa_id)
-    else:
-        form = MensagemForm()
+        # Checa se o botão de proposta de teste foi clicado
+        if 'action' in request.POST and request.POST['action'] == 'test_proposal':
+            Mensagem.objects.create(
+                conversa=current_conversa,
+                remetente=user,
+                imagem_proposta='propostas/tattoo.jpeg' # Usa o caminho da imagem estática
+            )
+        
+        # Se não, trata como texto normal
+        else:
+            texto_enviado = request.POST.get('texto', '').strip()
+            if texto_enviado:
+                Mensagem.objects.create(
+                    conversa=current_conversa,
+                    remetente=user,
+                    texto=texto_enviado
+                )
 
-    return render(request, 'aplicativo/artist_chat_detail.html', {
-        'cliente_chat': cliente_chat, # O cliente com quem o artista está conversando
+        current_conversa.ultima_atualizacao = timezone.now()
+        current_conversa.save()
+        return redirect('artist_chat_detail', conversa_id=conversa_id)
+            
+    context = {
+        'conversas_do_artista': conversas_do_artista,
+        'cliente_chat': cliente_chat,
         'mensagens': mensagens,
         'form': form,
         'current_user_id': user.id,
-        'conversa_id': conversa_id,
-        'is_artist': True # Passa a flag para o template
-    })
-
+        'active_chat_id': conversa_id,
+    }
+    return render(request, 'aplicativo/artist_chat_detail.html', context)
 
 def carol_view(request):
     return render(request, 'aplicativo/carol.html')
@@ -190,3 +204,19 @@ def user_preview(request):
     return render(request, 'aplicativo/user_preview.html', {
         'usuario': request.user  # envia o usuário logado com o nome atualizado
     })
+
+def executar_comando(request):
+    mensagem = ""
+    if request.method == 'POST':
+        comando = [
+            'python3',
+            'main.py',
+            '--mode', 'webcam',
+            '--tattoo', '/Users/marcoscheder/Documents/GitHub/mds/rosa.jpg'
+        ]
+        try:
+            subprocess.Popen(comando)
+            mensagem = "Comando iniciado com sucesso!"
+        except Exception as e:
+            mensagem = f"Erro ao executar: {e}"
+    return render(request, 'aplicativo/rodar_script.html', {'mensagem': mensagem})

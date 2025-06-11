@@ -15,30 +15,29 @@
   <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/web/assets/gdpr-plugin/gdpr-styles.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap">
   <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/socicon/css/styles.css' %}">
   <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
-  <link rel="preload" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
-  <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3"><link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3" type="text/css">
+
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
-      display: flex;
-      flex-direction: column; /* Coloca o header no topo e o resto abaixo */
-      min-height: 100vh;
+      display: flex; /* Make body a flex container */
+      height: 100vh; /* Full viewport height */
+      flex-direction: column; /* Adicionado para que o header fique no topo e o conteúdo abaixo */
     }
 
-    .main-content-wrapper {
+    .main-content-wrapper { /* Novo wrapper para o sidebar e main-chat-area */
         display: flex;
-        flex-grow: 1; /* Ocupa o espaço restante abaixo do header */
+        flex-grow: 1; /* Permite que ocupe o espaço restante */
+        padding-top: 10px;
     }
 
     .sidebar {
-      width: 250px;
+      width: 250px; /* Width of the conversation list sidebar */
       background-color: #f0f2f5;
       padding: 15px;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -76,7 +75,7 @@
     }
 
     .main-chat-area {
-      flex-grow: 1;
+      flex-grow: 1; /* Take remaining space */
       display: flex;
       flex-direction: column;
       background-color: #fff;
@@ -85,25 +84,31 @@
     .chat-header {
       display: flex;
       align-items: center;
-      background-color: #0084ff;
+      background-color: #232323;
       color: white;
       padding: 10px 15px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .chat-header img {
-      width: 50px;
-      height: 50px;
+      width: 45px !important;      /* FORÇA a largura ser 45px */
+      height: 45px !important;     /* FORÇA a altura ser 45px */
+      min-width: 45px;             /* Garante que a largura nunca seja menor que 45px */
+      min-height: 45px;            /* Garante que a altura nunca seja menor que 45px */
       border-radius: 50%;
-      margin-right: 15px;
       object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .chat-header h2 {
+      margin: 0;
     }
 
     .messages {
       flex-grow: 1;
       overflow-y: auto;
       padding: 15px;
-      background-color: #f0f2f5;
+      background-color: #f0f2f5; /* Chat background color */
     }
 
     .message {
@@ -111,24 +116,25 @@
       max-width: 60%;
       padding: 10px;
       border-radius: 10px;
-      word-wrap: break-word;
+      word-wrap: break-word; /* Ensure long words wrap */
     }
 
-    .message.mine {
+    .message.mine { /* Messages sent by the current user */
       margin-left: auto;
-      background-color: #d2e3ff;
+      background-color: #4a4a4a; /* <--- um cinza médio */
+      color: #ffffff; /* <--- texto branco pra ler melhor */
       text-align: right;
     }
 
-    .message.other {
+    .message.other { /* Messages from the artist */
       margin-right: auto;
-      background-color: #e1ffc7;
+      background-color: #e1ffc7; /* Green-ish */
       text-align: left;
     }
 
     .message .sender {
       font-size: 0.8em;
-      color: #555;
+      color: #b6b6b6;
       margin-bottom: 5px;
       font-weight: bold;
     }
@@ -141,49 +147,30 @@
 
     .chat-input {
       display: flex;
-      padding: 15px;
-      border-top: 1px solid #eee;
-      background-color: #fff;
+      padding: 15px; /* um padding pra ficar mais bonito */
+      background-color: #f0f2f5; /* a mesma cor de fundo das mensagens */
+      border-top: 1px solid #e0e0e0; /* uma linha fina pra separar */
     }
 
-    /* Estilo para o novo botão de compra */
-    .chat-input .buy-button {
+    /* Estilo para o novo botão de pagamento */
+    .chat-input .payment-button {
       margin-left: 10px;
-      padding: 10px 15px;
+      padding: 10px 15px; /* Ajuste o padding para o ícone */
       border: none;
-      background-color: #007bff; /* Azul para compra */
+      background-color: #28a745; /* Uma cor verde para pagamento */
       color: white;
       border-radius: 20px;
       cursor: pointer;
-      font-size: 1em;
+      font-size: 1.2em; /* Tamanho maior para o ícone */
+      font-weight: bold;
       transition: background-color 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .chat-input .buy-button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Estilo para o botão de câmera/loading */
-    .chat-input .camera-button {
-        margin-left: 10px;
-        padding: 10px 15px;
-        border: none;
-        background-color: #6c757d; /* Cinza */
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 1.2em;
-        transition: background-color 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .chat-input .camera-button:hover {
-        background-color: #5a6268;
+    .chat-input .payment-button:hover {
+      background-color: #218838;
     }
 
     .chat-input input[type="text"] {
@@ -199,7 +186,7 @@
       margin-left: 10px;
       padding: 10px 20px;
       border: none;
-      background-color: #0084ff;
+      background-color: #a95b18; /* <--- trocado! */
       color: white;
       border-radius: 20px;
       cursor: pointer;
@@ -216,6 +203,162 @@
       text-align: center;
       color: #777;
     }
+
+    .attach-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      margin-right: 10px; /* espacinho antes do campo de texto */
+      background-color: #6c757d; /* um cinza neutro */
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .attach-button:hover {
+      background-color: #5a6268;
+    }
+
+    .attach-button .mbr-iconfont {
+        font-size: 1.2rem;
+    }
+
+    /*-- Estilos da Sidebar Colapsável --*/
+
+    .sidebar {
+      width: 250px;
+      background-color: #f0f2f5;
+      padding: 15px;
+      overflow-y: auto;
+      transition: margin-left 0.35s ease;
+      margin-left: 0;
+      /* A MÁGICA DA BARRA DIVISORA */
+      border-right: 1px solid #ddd;
+    }
+
+    .sidebar.collapsed {
+      margin-left: -266px; /* Largura + 1px da borda */
+      border-right: none; /* Esconde a borda quando fechado */
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .sidebar-header h3 {
+      margin: 0; /* Remove margem do título */
+    }
+
+    .close-btn, .open-btn {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6c757d; /* cor do botão */
+      padding: 0 5px;
+    }
+
+    .open-btn {
+        color: #fff; /* cor do botão no header escuro */
+        margin-right: 10px; /* espacinho */
+    }
+
+.message-proposal {
+  display: flex;
+  flex-direction: row; /* alinha em linha */
+  align-items: center;  /* alinha os itens no centro verticalmente */
+  gap: 15px;
+}
+
+.proposal-image {
+  width: 100%; /* imagem ocupa todo o espaço do seu container */
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+/* um container novo pro texto no meio */
+.proposal-info {
+  text-align: left;
+  color: #333;
+}
+
+.proposal-action {
+  text-align: left;
+}
+
+.message.mine .proposal-info {
+  color: #e0e0e0; /* cor do texto pra vc que envia */
+}
+.proposal-info p {
+  margin: 0;
+  line-height: 1.3;
+}
+.proposal-info .proposal-title {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+.proposal-info .proposal-text {
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+
+/* o container do botão */
+.proposal-action {
+  flex-shrink: 0; /* impede que o botão encolha */
+}
+
+/* pra controlar a largura do balão da proposta */
+.message-type-proposal {
+    max-width: 500px; /* um valor fixo pra ele nao esticar demais */
+}
+
+    .proposal-action-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-color: #28a745;
+      color: white;
+    }
+
+    .proposal-action-button.loading {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .proposal-action-button .timer,
+    .proposal-action-button .spinner {
+      margin: 0 8px;
+      display: none;
+    }
+
+    .proposal-action-button.loading .timer,
+    .proposal-action-button.loading .spinner {
+      display: inline-block;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -228,17 +371,16 @@
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span><span></span>
                 </div>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'index' %}">Home</a></li>
+                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'index' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="{% url 'artistas' %}">Artistas</a></li>
-                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'artist_chats_list' %}">Meus Chats</a>
-                    </li><li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'user_preview' %}"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li></ul>
+                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'artist_chats_list' %}">Meus Chats</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{% url 'user_preview' %}"><span class="mobi-mbri mobi-mbri-user mbr-iconfont mbr-iconfont-btn" style="color: rgb(169, 91, 24);"></span></a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -246,19 +388,20 @@
 
 <div class="main-content-wrapper">
   <div class="sidebar">
-    <h3>Conversas com Clientes</h3>
+    <div class="sidebar-header">
+        <h3>Conversas com Clientes</h3>
+        <button class="close-btn">&times;</button>
+    </div>
     <div class="conversation-list">
       {% if conversas_do_artista %}
         {% for conversa in conversas_do_artista %}
-          <a href="{% url 'artist_chat_detail' conversa.id %}" class="conversation-item">
-            <img class="profile-pic" src="https://via.placeholder.com/50" alt="Foto de Perfil do Cliente"> <div class="conversation-info">
-                <h4>{{ conversa.usuario.first_name }} {{ conversa.usuario.last_name }}</h4>
-                <p>Última atualização: {{ conversa.ultima_atualizacao|date:"d/m/Y H:i" }}</p>
-            </div>
+          <a href="{% url 'artist_chat_detail' conversa.id %}" class="conversation-item {% if conversa.id == active_chat_id %}active{% endif %}">
+            <img class="profile-pic" src="{% static 'assets/images/dafault1.png' %}" alt="Foto de Perfil do Cliente">
+            <span>{{ conversa.usuario.first_name }} {{ conversa.usuario.last_name }}</span>
           </a>
         {% endfor %}
       {% else %}
-        <p class="no-conversations">Nenhuma conversa iniciada com clientes ainda.</p>
+        <p>Nenhuma conversa iniciada.</p>
       {% endif %}
     </div>
   </div>
@@ -266,120 +409,122 @@
   <div class="main-chat-area">
     {% if cliente_chat %}
       <div class="chat-header">
-        <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="Foto de Perfil do Cliente"> <h2>{{ cliente_chat.first_name }} {{ cliente_chat.last_name }}</h2>
+        <button class="open-btn">&#9776;</button>
+        <img src="{% static 'assets/images/dafault1.png' %}" alt="Foto de Perfil do Cliente"> 
+        <h2>{{ cliente_chat.first_name }} {{ cliente_chat.last_name }}</h2>
       </div>
 
       <div class="messages">
         {% for msg in mensagens %}
           <div class="message {% if msg.remetente.id == current_user_id %}mine{% else %}other{% endif %}">
             <div class="sender">
-              {% if msg.remetente.id == current_user_id %}
-                Você
-              {% else %}
-                {{ cliente_chat.first_name }}
-              {% endif %}
+              {% if msg.remetente.id == current_user_id %}Você{% else %}{{ cliente_chat.first_name }}{% endif %}
             </div>
-            {{ msg.texto }}
+
+            {% if msg.imagem_proposta %}
+              <div class="message-proposal">
+                  <div class="proposal-image-container">
+                    <img class="proposal-image" src="{{ msg.imagem_proposta.url }}" alt="Proposta de Imagem">
+                  </div>
+                  <div class="proposal-details-container">
+                    <div class="proposal-info">
+                      <p class="proposal-title">Arte para aprovação</p>
+                      <p class="proposal-text">Clique para comprar e simular.</p>
+                    </div>
+                    <div class="proposal-action">
+                        <button class="proposal-action-button" onclick="startPurchase(this)">
+                            <span class="timer"></span>
+                            <span class="button-text">Comprar</span>
+                            <span class="spinner"></span>
+                        </button>
+                    </div>
+                  </div>
+                </div>
+            {% else %}
+              {{ msg.texto }}
+            {% endif %}
+
             <span class="timestamp">{{ msg.timestamp|date:"H:i" }}</span>
           </div>
         {% endfor %}
       </div>
       
-      <form method="post" class="chat-input">
+      <form method="post" class="chat-input" enctype="multipart/form-data">
         {% csrf_token %}
+
+        <input type="file" id="file-upload" name="attachment" style="display: none;" onchange="this.form.submit()">
+
+        <label for="file-upload" class="attach-button" title="Anexar Imagem Real">
+            <span class="mobi-mbri mobi-mbri-paperclip mbr-iconfont"></span>
+        </label>
+
         {{ form.texto }}
         <button type="submit">Enviar</button>
-        
-        <button type="button" id="buyButton" class="buy-button" onclick="handleBuyClick()" style="display: none;">Comprar R$500</button>
-      </form>
+        <button type="submit" name="action" value="test_proposal" class="test-proposal-button" style="background-color: #ffc107; color: black; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer;">Testar Compra</button>
+    </form>
+
     {% else %}
       <div class="no-conversations">
-        <h2>Selecione uma conversa com um cliente.</h2>
-        <p>Clique em um cliente na lista ao lado para abrir o chat.</p>
+        <h2>Selecione uma conversa.</h2>
       </div>
     {% endif %}
   </div>
 </div>
 
 <script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
-<script src="{% static 'assets/ytplayer/index.js' %}"></script>
-<script src="{% static 'assets/dropdown/js/navbar-dropdown.js' %}"></script>
-<script src="{% static 'assets/theme/js/script.js' %}"></script>
-
 <script>
-    // Função para simular o envio de imagem (APENAS PARA TESTE VISUAL)
-    // Em uma implementação real, esta função faria um AJAX para enviar a imagem
-    // e só então chamaria 'showBuyButton' em caso de sucesso.
-    function simulateImageSend() {
-        // Esta é uma simulação de que uma imagem foi enviada.
-        // Em um cenário real, você teria um input type="file" e um botão de envio de imagem,
-        // e essa função seria chamada após o upload bem-sucedido da imagem para o servidor.
+    function startPurchase(buttonElement) {
+        buttonElement.classList.add('loading');
+        buttonElement.disabled = true;
+        const buttonText = buttonElement.querySelector('.button-text');
+        const timerSpan = buttonElement.querySelector('.timer');
+        if(buttonText) buttonText.textContent = 'Carregando';
+
+        window.open('https://link.mercadopago.com.br/matwon', 'Pagamento', 'width=600,height=700,scrollbars=yes'); //coloca aqui o link do pagamento
+
+        let timeLeft = 5;
+        if(timerSpan) timerSpan.textContent = `(${timeLeft}s)`;
         
-        console.log("Simulando envio de imagem...");
-        // Adiciona uma mensagem de imagem ao chat (visual, não persistente no BD)
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if(timerSpan) timerSpan.textContent = `(${timeLeft}s)`;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                transformToSimulateButton(buttonElement);
+            }
+        }, 1000);
+    }
+
+    function transformToSimulateButton(buttonElement) {
+        buttonElement.classList.remove('loading');
+        const timerSpan = buttonElement.querySelector('.timer');
+        const spinnerSpan = buttonElement.querySelector('.spinner');
+        if(timerSpan) timerSpan.style.display = 'none';
+        if(spinnerSpan) spinnerSpan.style.display = 'none';
+
+        const buttonText = buttonElement.querySelector('.button-text');
+        if(buttonText) buttonText.textContent = 'Simular';
+        buttonElement.disabled = false;
+
+        buttonElement.onclick = () => {
+            window.open('/executar', '_blank'); //coloca aqui o link de simulação
+        };
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
         const messagesContainer = document.querySelector('.messages');
-        const imgMessage = document.createElement('div');
-        imgMessage.className = 'message mine'; // Ou 'other' dependendo de quem "enviou" a imagem
-        imgMessage.innerHTML = `Foto enviada (simulada): <img src="{% static 'assets/images/default_image_sent.jpg' %}" style="max-width:150px; border-radius: 5px;">`; // Use uma imagem padrão ou de teste
-        messagesContainer.appendChild(imgMessage);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll para o final
+        if (messagesContainer) {
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
 
-        // Mostra o botão de compra após a "imagem" ser "enviada"
-        showBuyButton();
-    }
-
-    function showBuyButton() {
-        const buyButton = document.getElementById('buyButton');
-        buyButton.style.display = 'block'; // Torna o botão visível
-    }
-
-    function handleBuyClick() {
-        const buyButton = document.getElementById('buyButton');
-        const originalButtonText = buyButton.textContent;
-        const originalButtonClass = buyButton.className;
-
-        // 1. Botão "Carregando..."
-        buyButton.textContent = 'Carregando...';
-        buyButton.disabled = true; // Desabilita o botão para evitar múltiplos cliques
-        buyButton.className = 'buy-button camera-button'; // Muda para um estilo mais neutro/cinza
-
-        // Link de pagamento (SEU LINK REAL DO MERCADO PAGO AQUI)
-        const paymentLink = 'https://link.mercadopago.com.br/matwon'; // Seu link de perfil/pagamento
-
-        // 2. Timeout de 5 segundos
-        window.open(paymentLink, '_blank'); // Abre em nova aba
-        setTimeout(() => {
-            // 3. Redirecionar para a página de pagamento
-            
-
-            // 4. Mudar o botão para Câmera
-            buyButton.innerHTML = '<span class="mobi-mbri mobi-mbri-camera"></span>'; // Ícone de câmera Mobirise
-            buyButton.className = 'camera-button'; // Aplica o estilo de câmera
-            buyButton.disabled = false; // Habilita o botão novamente, agora como câmera
-
-            // Opcional: Você pode querer adicionar um evento para o botão da câmera,
-            // ou logicamente resetar o estado se o pagamento não for concluído.
-            // Para este exemplo, ele permanece como câmera.
-
-        }, 5000); // 5000 milissegundos = 5 segundos
-    }
-
-    // Opcional: Adicione um botão para "simular" o envio de imagem para teste
-    // REMOVA ISSO EM PRODUÇÃO
-    document.addEventListener('DOMContentLoaded', (event) => {
-        if (window.location.href.includes('/artist/chat/')) { // Só para a página de chat do artista
-            // Cria um botão de simulação para testar a visibilidade do botão de compra
-            const chatInputForm = document.querySelector('.chat-input');
-            const simulateButton = document.createElement('button');
-            simulateButton.type = 'button';
-            simulateButton.textContent = 'Simular Envio Imagem';
-            simulateButton.style = 'margin-left: 10px; padding: 10px; background-color: #ffc107; border: none; border-radius: 5px; cursor: pointer;';
-            simulateButton.onclick = simulateImageSend;
-            chatInputForm.appendChild(simulateButton);
+        const sidebar = document.querySelector('.sidebar');
+        const openBtn = document.querySelector('.open-btn');
+        const closeBtn = document.querySelector('.close-btn');
+        if (sidebar && openBtn && closeBtn) {
+          openBtn.addEventListener('click', () => sidebar.classList.remove('collapsed'));
+          closeBtn.addEventListener('click', () => sidebar.classList.add('collapsed'));
         }
     });
-
 </script>
 
 </body>

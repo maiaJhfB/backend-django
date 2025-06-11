@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Executar Tatuagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .mensagem {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Aplicar Tatuagem com Webcam</h1>
+
+    <form method="post" action="{% url 'executar_comando' %}">
+        {% csrf_token %}
+        <button type="submit">Rodar script</button>
+    </form>
+
+    {% if mensagem %}
+        <div class="mensagem">{{ mensagem }}</div>
+    {% endif %}
+</body>
+</html>

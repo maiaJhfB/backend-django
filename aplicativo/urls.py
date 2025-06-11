@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     # path("", views.index, name="index"), # Já deve estar no projeto/urls.py
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('termos/', views.termos_view, name='termos'),
+    path('executar/', views.executar_comando, name='executar_comando'),
 ]
