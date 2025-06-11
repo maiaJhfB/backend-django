@@ -1,3 +1,4 @@
+# aplicativo/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -8,7 +9,6 @@ from django.contrib.auth.models import User
 from django import forms
 from django.utils import timezone
 
-# Função auxiliar para verificar se o usuário é um artista
 def is_artist_check(user):
     return hasattr(user, 'tatuador') and user.tatuador is not None
 
@@ -112,46 +112,55 @@ def artist_chats_list(request):
         'is_artist': True
     })
 
-# aplicatico/views.py
+# aplicativo/views.py
+
+# aplicativo/views.py
+
+# aplicativo/views.py
 
 @login_required
 @user_passes_test(is_artist_check, login_url='/login/')
 def artist_chat_detail(request, conversa_id):
     user = request.user
     tatuador_perfil = get_object_or_404(CadastroTatuador, usuario=user)
-    
     current_conversa = get_object_or_404(Conversa, id=conversa_id, artista=tatuador_perfil)
-    
-    # 1. BUSCA A LISTA DE TODAS AS CONVERSAS PARA A SIDEBAR (A LINHA QUE FALTAVA)
     conversas_do_artista = Conversa.objects.filter(artista=tatuador_perfil).order_by('-ultima_atualizacao')
-
-    cliente_chat = current_conversa.usuario 
+    cliente_chat = current_conversa.usuario
     mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
+    form = MensagemForm()
 
     if request.method == "POST":
-        form = MensagemForm(request.POST)
-        if form.is_valid():
-            nova_msg = form.save(commit=False)
-            nova_msg.conversa = current_conversa
-            nova_msg.remetente = user
-            nova_msg.save()
-            current_conversa.ultima_atualizacao = timezone.now()
-            current_conversa.save()
-            return redirect('artist_chat_detail', conversa_id=conversa_id)
-    else:
-        form = MensagemForm()
+        # Checa se o botão de proposta de teste foi clicado
+        if 'action' in request.POST and request.POST['action'] == 'test_proposal':
+            Mensagem.objects.create(
+                conversa=current_conversa,
+                remetente=user,
+                imagem_proposta='propostas/tattoo.jpeg' # Usa o caminho da imagem estática
+            )
+        
+        # Se não, trata como texto normal
+        else:
+            texto_enviado = request.POST.get('texto', '').strip()
+            if texto_enviado:
+                Mensagem.objects.create(
+                    conversa=current_conversa,
+                    remetente=user,
+                    texto=texto_enviado
+                )
 
-    # 2. MANDA TUDO PRO HTML, INCLUSIVE A LISTA E O ID DO CHAT ATIVO
-    return render(request, 'aplicativo/artist_chat_detail.html', {
-        'conversas_do_artista': conversas_do_artista, # <-- Adicionado!
+        current_conversa.ultima_atualizacao = timezone.now()
+        current_conversa.save()
+        return redirect('artist_chat_detail', conversa_id=conversa_id)
+            
+    context = {
+        'conversas_do_artista': conversas_do_artista,
         'cliente_chat': cliente_chat,
         'mensagens': mensagens,
         'form': form,
         'current_user_id': user.id,
-        'active_chat_id': conversa_id, # <-- Renomeado para ficar claro
-        'is_artist': True
-    })
-
+        'active_chat_id': conversa_id,
+    }
+    return render(request, 'aplicativo/artist_chat_detail.html', context)
 
 def carol_view(request):
     return render(request, 'aplicativo/carol.html')

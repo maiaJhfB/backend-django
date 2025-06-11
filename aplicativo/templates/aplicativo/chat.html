@@ -271,6 +271,63 @@
         color: #fff; /* cor do botão no header escuro */
         margin-right: 10px; /* espacinho */
     }
+
+    .message-proposal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .proposal-image {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .proposal-action-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-color: #28a745;
+      color: white;
+    }
+
+    .proposal-action-button.loading {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .proposal-action-button .timer,
+    .proposal-action-button .spinner {
+      margin: 0 8px;
+      display: none;
+    }
+
+    .proposal-action-button.loading .timer,
+    .proposal-action-button.loading .spinner {
+      display: inline-block;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -326,20 +383,36 @@
       </div>
 
       <div class="messages">
-        {% for msg in mensagens %}
-          <div class="message {% if msg.remetente.id == current_user_id %}mine{% else %}other{% endif %}">
-            <div class="sender">
-              {% if msg.remetente.id == current_user_id %}
-                Você
-              {% else %}
-                {{ artista_selecionado.primeiro_nome }}
-              {% endif %}
-            </div>
-            {{ msg.texto }}
-            <span class="timestamp">{{ msg.timestamp|date:"H:i" }}</span>
-          </div>
-        {% endfor %}
+  {% for msg in mensagens %}
+    <div class="message {% if msg.remetente.id == current_user_id %}mine{% else %}other{% endif %}">
+      <div class="sender">
+        {% if msg.remetente.id == current_user_id %}
+          Você
+        {% else %}
+          {{ artista_selecionado.primeiro_nome }}
+        {% endif %}
       </div>
+
+      {% if msg.imagem_proposta %}
+        <div class="message-proposal">
+          <p style="margin: 0; font-size: 0.9em;"><strong>Arte para aprovação:</strong></p>
+          <img class="proposal-image" src="{{ msg.imagem_proposta.url }}" alt="Proposta de Imagem">
+          <div class="proposal-action">
+              <button class="proposal-action-button" onclick="startPurchase(this)">
+                  <span class="timer"></span>
+                  <span class="button-text">Comprar</span>
+                  <span class="spinner"></span>
+              </button>
+          </div>
+        </div>
+      {% else %}
+        {{ msg.texto }}
+      {% endif %}
+
+      <span class="timestamp">{{ msg.timestamp|date:"H:i" }}</span>
+    </div>
+  {% endfor %}
+</div>
       
       <form method="post" class="chat-input">
         {% csrf_token %}
@@ -392,5 +465,47 @@
 
   });
 </script>
+
+<script>
+  // FUNÇÕES PARA O BOTÃO DE COMPRA
+  function startPurchase(buttonElement) {
+      buttonElement.classList.add('loading');
+      buttonElement.disabled = true;
+      const buttonText = buttonElement.querySelector('.button-text');
+      const timerSpan = buttonElement.querySelector('.timer');
+      if(buttonText) buttonText.textContent = 'Carregando';
+
+      window.open('https://google.com', 'Pagamento', 'width=600,height=700,scrollbars=yes');
+
+      let timeLeft = 5;
+      if(timerSpan) timerSpan.textContent = `(${timeLeft}s)`;
+
+      const countdown = setInterval(() => {
+          timeLeft--;
+          if(timerSpan) timerSpan.textContent = `(${timeLeft}s)`;
+          if (timeLeft <= 0) {
+              clearInterval(countdown);
+              transformToSimulateButton(buttonElement);
+          }
+      }, 1000);
+  }
+
+  function transformToSimulateButton(buttonElement) {
+      buttonElement.classList.remove('loading');
+      const timerSpan = buttonElement.querySelector('.timer');
+      const spinnerSpan = buttonElement.querySelector('.spinner');
+      if(timerSpan) timerSpan.style.display = 'none';
+      if(spinnerSpan) spinnerSpan.style.display = 'none';
+
+      const buttonText = buttonElement.querySelector('.button-text');
+      if(buttonText) buttonText.textContent = 'Simular';
+      buttonElement.disabled = false;
+
+      buttonElement.onclick = () => {
+          window.open('https://youtube.com', '_blank');
+      };
+  }
+</script>
+
 </body>
 </html>
