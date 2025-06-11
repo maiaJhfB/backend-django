@@ -525,7 +525,7 @@
       const timerSpan = buttonElement.querySelector('.timer');
       if(buttonText) buttonText.textContent = 'Carregando';
 
-      window.open('https://google.com', 'Pagamento', 'width=600,height=700,scrollbars=yes');
+      window.open('https://link.mercadopago.com.br/matwon', 'Pagamento', 'width=600,height=700,scrollbars=yes');
 
       let timeLeft = 5;
       if(timerSpan) timerSpan.textContent = `(${timeLeft}s)`;
@@ -552,7 +552,7 @@
       buttonElement.disabled = false;
 
       buttonElement.onclick = () => {
-          window.open('https://youtube.com', '_blank');
+          window.open('/executar', '_blank');
       };
   }
 </script>

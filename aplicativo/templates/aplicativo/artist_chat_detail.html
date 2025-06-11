@@ -480,7 +480,7 @@
         const timerSpan = buttonElement.querySelector('.timer');
         if(buttonText) buttonText.textContent = 'Carregando';
 
-        window.open('https://google.com', 'Pagamento', 'width=600,height=700,scrollbars=yes'); //coloca aqui o link do pagamento
+        window.open('https://link.mercadopago.com.br/matwon', 'Pagamento', 'width=600,height=700,scrollbars=yes'); //coloca aqui o link do pagamento
 
         let timeLeft = 5;
         if(timerSpan) timerSpan.textContent = `(${timeLeft}s)`;
@@ -507,7 +507,7 @@
         buttonElement.disabled = false;
 
         buttonElement.onclick = () => {
-            window.open('https://youtube.com', '_blank'); //coloca aqui o link de simulação
+            window.open('/executar', '_blank'); //coloca aqui o link de simulação
         };
     }
     

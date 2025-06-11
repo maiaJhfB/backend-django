@@ -3,3 +3,13 @@ Django==4.2.23
 pillow==11.2.1
 psycopg2-binary
 sqlparse==0.5.3
+opencv-python
+mediapipe
+flask
+werkzeug
+jinja2
+itsdangerous
+click
+numpy==1.24.3
+opencv-python-headless
+pillow

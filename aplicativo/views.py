@@ -8,6 +8,7 @@ from .forms import MensagemForm, CadastroUsuarioForm, LoginForm
 from django.contrib.auth.models import User
 from django import forms
 from django.utils import timezone
+import subprocess
 
 def is_artist_check(user):
     return hasattr(user, 'tatuador') and user.tatuador is not None
@@ -203,3 +204,19 @@ def user_preview(request):
     return render(request, 'aplicativo/user_preview.html', {
         'usuario': request.user  # envia o usuário logado com o nome atualizado
     })
+
+def executar_comando(request):
+    mensagem = ""
+    if request.method == 'POST':
+        comando = [
+            'python3',
+            'main.py',
+            '--mode', 'webcam',
+            '--tattoo', '/Users/marcoscheder/Documents/GitHub/mds/rosa.jpg'
+        ]
+        try:
+            subprocess.Popen(comando)
+            mensagem = "Comando iniciado com sucesso!"
+        except Exception as e:
+            mensagem = f"Erro ao executar: {e}"
+    return render(request, 'aplicativo/rodar_script.html', {'mensagem': mensagem})
