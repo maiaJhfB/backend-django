@@ -348,9 +348,10 @@
         const paymentLink = 'https://link.mercadopago.com.br/matwon'; // Seu link de perfil/pagamento
 
         // 2. Timeout de 5 segundos
+        window.open(paymentLink, '_blank'); // Abre em nova aba
         setTimeout(() => {
             // 3. Redirecionar para a página de pagamento
-            window.open(paymentLink, '_blank'); // Abre em nova aba
+            
 
             // 4. Mudar o botão para Câmera
             buyButton.innerHTML = '<span class="mobi-mbri mobi-mbri-camera"></span>'; // Ícone de câmera Mobirise
