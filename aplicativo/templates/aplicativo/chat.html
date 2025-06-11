@@ -37,6 +37,7 @@
     .main-content-wrapper { /* Novo wrapper para o sidebar e main-chat-area */
         display: flex;
         flex-grow: 1; /* Permite que ocupe o espaço restante */
+        padding-top: 10px;
     }
 
     .sidebar {
@@ -87,18 +88,24 @@
     .chat-header {
       display: flex;
       align-items: center;
-      background-color: #0084ff;
+      background-color: #232323;
       color: white;
       padding: 10px 15px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .chat-header img {
-      width: 50px;
-      height: 50px;
+      width: 45px !important;      /* FORÇA a largura ser 45px */
+      height: 45px !important;     /* FORÇA a altura ser 45px */
+      min-width: 45px;             /* Garante que a largura nunca seja menor que 45px */
+      min-height: 45px;            /* Garante que a altura nunca seja menor que 45px */
       border-radius: 50%;
-      margin-right: 15px;
       object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .chat-header h2 {
+      margin: 0;
     }
 
     .messages {
@@ -118,7 +125,8 @@
 
     .message.mine { /* Messages sent by the current user */
       margin-left: auto;
-      background-color: #d2e3ff; /* Blue-ish */
+      background-color: #4a4a4a; /* <--- um cinza médio */
+      color: #ffffff; /* <--- texto branco pra ler melhor */
       text-align: right;
     }
 
@@ -130,7 +138,7 @@
 
     .message .sender {
       font-size: 0.8em;
-      color: #555;
+      color: #b6b6b6;
       margin-bottom: 5px;
       font-weight: bold;
     }
@@ -143,7 +151,11 @@
 
     .chat-input {
       display: flex;
+      padding: 15px; /* um padding pra ficar mais bonito */
+      background-color: #f0f2f5; /* a mesma cor de fundo das mensagens */
+      border-top: 1px solid #e0e0e0; /* uma linha fina pra separar */
     }
+
     /* Estilo para o novo botão de pagamento */
     .chat-input .payment-button {
       margin-left: 10px;
@@ -178,7 +190,7 @@
       margin-left: 10px;
       padding: 10px 20px;
       border: none;
-      background-color: #0084ff;
+      background-color: #a95b18; /* <--- trocado! */
       color: white;
       border-radius: 20px;
       cursor: pointer;
@@ -194,6 +206,64 @@
       padding: 20px;
       text-align: center;
       color: #777;
+    }
+
+    .attach-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      margin-right: 10px; /* espacinho antes do campo de texto */
+      background-color: #6c757d; /* um cinza neutro */
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .attach-button:hover {
+      background-color: #5a6268;
+    }
+
+    .attach-button .mbr-iconfont {
+        font-size: 1.2rem;
+    }
+
+    /*-- Estilos da Sidebar Colapsável --*/
+
+    .sidebar {
+      /* ...seus estilos de width, background, etc... */
+      transition: margin-left 0.35s ease; /* A animação! */
+      margin-left: 0; /* Posição inicial */
+    }
+
+    .sidebar.collapsed {
+      margin-left: -265px; /* Empurra pra esquerda pra sumir (largura + um pouco) */
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .sidebar-header h3 {
+      margin: 0; /* Remove margem do título */
+    }
+
+    .close-btn, .open-btn {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6c757d; /* cor do botão */
+      padding: 0 5px;
+    }
+
+    .open-btn {
+        color: #fff; /* cor do botão no header escuro */
+        margin-right: 10px; /* espacinho */
     }
   </style>
 </head>
@@ -224,8 +294,11 @@
 </section>
 <div class="main-content-wrapper">
   <div class="sidebar">
-    <h3>Suas Conversas</h3>
-    <div class="conversation-list">
+  <div class="sidebar-header">
+      <h3>Suas Conversas</h3>
+      <button class="close-btn">&times;</button>
+  </div>
+  <div class="conversation-list">
       {% if conversas_do_usuario %}
         {% for conversa in conversas_do_usuario %}
           <a href="{% url 'chat_com_artista' conversa.artista.id %}">
@@ -242,7 +315,8 @@
   <div class="main-chat-area">
     {% if artista_selecionado %}
       <div class="chat-header">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Perfil"> <h2>{{ artista_selecionado.primeiro_nome }} {{ artista_selecionado.sobre_nome }}</h2>
+        <button class="open-btn">&#9776;</button> <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Perfil"> 
+        <h2>{{ artista_selecionado.primeiro_nome }} {{ artista_selecionado.sobre_nome }}</h2>
       </div>
 
       <div class="messages">
@@ -263,6 +337,13 @@
       
       <form method="post" class="chat-input">
         {% csrf_token %}
+        
+        <input type="file" id="file-upload" style="display: none;">
+
+        <label for="file-upload" class="attach-button">
+            <span class="mobi-mbri mobi-mbri-paperclip mbr-iconfont"></span>
+        </label>
+
         {{ form.texto }}
         <button type="submit">Enviar</button>
         <button type="button" class="payment-button" onclick="window.open('https://link.mercadopago.com.br/matwon', '_blank');">$</button>
@@ -274,10 +355,36 @@
       </div>
     {% endif %}
   </div>
-</div> <script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</div> 
+<script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
 <script src="{% static 'assets/ytplayer/index.js' %}"></script>
 <script src="{% static 'assets/dropdown/js/navbar-dropdown.js' %}"></script>
 <script src="{% static 'assets/theme/js/script.js' %}"></script>
+<script>
+  // espera a página carregar
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // seleciona os elementos que a gente precisa
+    const sidebar = document.querySelector('.sidebar');
+    const openBtn = document.querySelector('.open-btn');
+    const closeBtn = document.querySelector('.close-btn');
+
+    // se os elementos existirem na página...
+    if (sidebar && openBtn && closeBtn) {
+      
+      // quando clicar no botão de abrir, remove a classe 'collapsed'
+      openBtn.addEventListener('click', function() {
+        sidebar.classList.remove('collapsed');
+      });
+
+      // quando clicar no "X", adiciona a classe 'collapsed'
+      closeBtn.addEventListener('click', function() {
+        sidebar.classList.add('collapsed');
+      });
+    }
+
+  });
+</script>
 </body>
 </html>

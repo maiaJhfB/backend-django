@@ -15,26 +15,25 @@
   <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/web/assets/gdpr-plugin/gdpr-styles.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap">
   <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/socicon/css/styles.css' %}">
   <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
-  <link rel="preload" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Epilogue:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
-  <link rel="preload" as="style" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3"><link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}?v=7zM6a3" type="text/css">
+
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
       display: flex;
-      flex-direction: column; /* Coloca o header no topo e o resto abaixo */
-      min-height: 100vh;
+      flex-direction: column;
+      height: 100vh;
     }
 
     .main-content-wrapper {
         display: flex;
-        flex-grow: 1; /* Ocupa o espaço restante abaixo do header */
+        flex-grow: 1;
+        padding-top: 10px; /* FIX: EMPURRA O CONTEÚDO PRA BAIXO DA NAVBAR */
     }
 
     .sidebar {
@@ -82,23 +81,31 @@
       background-color: #fff;
     }
 
+    /*-- HEADER DO CHAT --*/
     .chat-header {
       display: flex;
       align-items: center;
-      background-color: #0084ff;
+      background-color: #232323;
       color: white;
       padding: 10px 15px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .chat-header img {
-      width: 50px;
-      height: 50px;
+      width: 45px !important;
+      height: 45px !important;
+      min-width: 45px;
+      min-height: 45px;
       border-radius: 50%;
-      margin-right: 15px;
       object-fit: cover;
+      margin-right: 15px;
     }
 
+    .chat-header h2 {
+      margin: 0;
+    }
+
+    /*-- ÁREA DAS MENSAGENS --*/
     .messages {
       flex-grow: 1;
       overflow-y: auto;
@@ -116,7 +123,8 @@
 
     .message.mine {
       margin-left: auto;
-      background-color: #d2e3ff;
+      background-color: #4a4a4a;
+      color: #ffffff;
       text-align: right;
     }
 
@@ -128,10 +136,15 @@
 
     .message .sender {
       font-size: 0.8em;
-      color: #555;
+      color: #555; /* Cor padrão pro balão dos outros */
       margin-bottom: 5px;
       font-weight: bold;
     }
+
+    .message.mine .sender {
+        color: #e0e0e0; /* FIX: Cor clara para o "Você" no balão escuro */
+    }
+    
     .message .timestamp {
       font-size: 0.7em;
       color: #777;
@@ -139,51 +152,13 @@
       display: block;
     }
 
+    /*-- INPUT DE MENSAGEM --*/
     .chat-input {
       display: flex;
+      align-items: center; /* FIX: Alinha tudo na vertical */
       padding: 15px;
-      border-top: 1px solid #eee;
-      background-color: #fff;
-    }
-
-    /* Estilo para o novo botão de compra */
-    .chat-input .buy-button {
-      margin-left: 10px;
-      padding: 10px 15px;
-      border: none;
-      background-color: #007bff; /* Azul para compra */
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .chat-input .buy-button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Estilo para o botão de câmera/loading */
-    .chat-input .camera-button {
-        margin-left: 10px;
-        padding: 10px 15px;
-        border: none;
-        background-color: #6c757d; /* Cinza */
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 1.2em;
-        transition: background-color 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .chat-input .camera-button:hover {
-        background-color: #5a6268;
+      background-color: #f0f2f5;
+      border-top: 1px solid #e0e0e0;
     }
 
     .chat-input input[type="text"] {
@@ -199,7 +174,7 @@
       margin-left: 10px;
       padding: 10px 20px;
       border: none;
-      background-color: #0084ff;
+      background-color: #a95b18; /* Cor laranja do site */
       color: white;
       border-radius: 20px;
       cursor: pointer;
@@ -208,8 +183,49 @@
     }
 
     .chat-input button:hover {
-      background-color: #0066cc;
+      background-color: #8b4913;
     }
+    
+    /*-- BOTÃO DE ANEXO --*/
+    .attach-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      margin-right: 10px;
+      background-color: #6c757d;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .attach-button:hover {
+      background-color: #5a6268;
+    }
+
+    .attach-button .mbr-iconfont {
+        font-size: 1.2rem;
+    }
+
+    /*-- OUTROS BOTÕES (COMPRA/CÂMERA) --*/
+    .buy-button, .camera-button {
+      margin-left: 10px;
+      padding: 10px 15px;
+      border: none;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .buy-button { background-color: #007bff; }
+    .buy-button:hover { background-color: #0056b3; }
+    .camera-button { background-color: #6c757d; }
+    .camera-button:hover { background-color: #5a6268; }
 
     .no-conversations {
       padding: 20px;
@@ -253,7 +269,6 @@
           <a href="{% url 'artist_chat_detail' conversa.id %}" class="conversation-item">
             <img class="profile-pic" src="https://via.placeholder.com/50" alt="Foto de Perfil do Cliente"> <div class="conversation-info">
                 <h4>{{ conversa.usuario.first_name }} {{ conversa.usuario.last_name }}</h4>
-                <p>Última atualização: {{ conversa.ultima_atualizacao|date:"d/m/Y H:i" }}</p>
             </div>
           </a>
         {% endfor %}
@@ -287,10 +302,18 @@
       
       <form method="post" class="chat-input">
         {% csrf_token %}
+
+        <input type="file" id="file-upload" name="attachment" style="display: none;">
+        <label for="file-upload" class="attach-button">
+            <span class="mobi-mbri mobi-mbri-paperclip mbr-iconfont"></span>
+        </label>
+
         {{ form.texto }}
         <button type="submit">Enviar</button>
         
         <button type="button" id="buyButton" class="buy-button" onclick="handleBuyClick()" style="display: none;">Comprar R$500</button>
+      
+        <button type="button" onclick="simulateImageSend()" style="background-color: #ffc107; color: black;">Testar Compra</button>
       </form>
     {% else %}
       <div class="no-conversations">
@@ -308,78 +331,52 @@
 <script src="{% static 'assets/theme/js/script.js' %}"></script>
 
 <script>
-    // Função para simular o envio de imagem (APENAS PARA TESTE VISUAL)
-    // Em uma implementação real, esta função faria um AJAX para enviar a imagem
-    // e só então chamaria 'showBuyButton' em caso de sucesso.
     function simulateImageSend() {
-        // Esta é uma simulação de que uma imagem foi enviada.
-        // Em um cenário real, você teria um input type="file" e um botão de envio de imagem,
-        // e essa função seria chamada após o upload bem-sucedido da imagem para o servidor.
-        
         console.log("Simulando envio de imagem...");
-        // Adiciona uma mensagem de imagem ao chat (visual, não persistente no BD)
         const messagesContainer = document.querySelector('.messages');
         const imgMessage = document.createElement('div');
-        imgMessage.className = 'message mine'; // Ou 'other' dependendo de quem "enviou" a imagem
-        imgMessage.innerHTML = `Foto enviada (simulada): <img src="{% static 'assets/images/default_image_sent.jpg' %}" style="max-width:150px; border-radius: 5px;">`; // Use uma imagem padrão ou de teste
+        imgMessage.className = 'message mine';
+        imgMessage.innerHTML = `Foto enviada (simulada): <img src="https://via.placeholder.com/150" style="max-width:150px; border-radius: 5px;">`;
         messagesContainer.appendChild(imgMessage);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll para o final
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Mostra o botão de compra após a "imagem" ser "enviada"
         showBuyButton();
     }
 
     function showBuyButton() {
         const buyButton = document.getElementById('buyButton');
-        buyButton.style.display = 'block'; // Torna o botão visível
+        buyButton.style.display = 'flex';
     }
 
     function handleBuyClick() {
         const buyButton = document.getElementById('buyButton');
-        const originalButtonText = buyButton.textContent;
-        const originalButtonClass = buyButton.className;
-
-        // 1. Botão "Carregando..."
         buyButton.textContent = 'Carregando...';
-        buyButton.disabled = true; // Desabilita o botão para evitar múltiplos cliques
-        buyButton.className = 'buy-button camera-button'; // Muda para um estilo mais neutro/cinza
+        buyButton.disabled = true;
+        buyButton.className = 'buy-button camera-button';
 
-        // Link de pagamento (SEU LINK REAL DO MERCADO PAGO AQUI)
-        const paymentLink = 'https://link.mercadopago.com.br/matwon'; // Seu link de perfil/pagamento
-
-        // 2. Timeout de 5 segundos
-        window.open(paymentLink, '_blank'); // Abre em nova aba
+        const paymentLink = 'https://link.mercadopago.com.br/matwon';
+        
+        window.open(paymentLink, '_blank');
+        
         setTimeout(() => {
-            // 3. Redirecionar para a página de pagamento
-            
-
-            // 4. Mudar o botão para Câmera
-            buyButton.innerHTML = '<span class="mobi-mbri mobi-mbri-camera"></span>'; // Ícone de câmera Mobirise
-            buyButton.className = 'camera-button'; // Aplica o estilo de câmera
-            buyButton.disabled = false; // Habilita o botão novamente, agora como câmera
-
-            // Opcional: Você pode querer adicionar um evento para o botão da câmera,
-            // ou logicamente resetar o estado se o pagamento não for concluído.
-            // Para este exemplo, ele permanece como câmera.
-
-        }, 5000); // 5000 milissegundos = 5 segundos
+            buyButton.innerHTML = '<span class="mobi-mbri mobi-mbri-camera"></span>';
+            buyButton.className = 'camera-button';
+            buyButton.disabled = false;
+        }, 5000);
     }
+</script>
 
-    // Opcional: Adicione um botão para "simular" o envio de imagem para teste
-    // REMOVA ISSO EM PRODUÇÃO
-    document.addEventListener('DOMContentLoaded', (event) => {
-        if (window.location.href.includes('/artist/chat/')) { // Só para a página de chat do artista
-            // Cria um botão de simulação para testar a visibilidade do botão de compra
-            const chatInputForm = document.querySelector('.chat-input');
-            const simulateButton = document.createElement('button');
-            simulateButton.type = 'button';
-            simulateButton.textContent = 'Simular Envio Imagem';
-            simulateButton.style = 'margin-left: 10px; padding: 10px; background-color: #ffc107; border: none; border-radius: 5px; cursor: pointer;';
-            simulateButton.onclick = simulateImageSend;
-            chatInputForm.appendChild(simulateButton);
-        }
-    });
+<script>
+  // espera a página carregar inteira pra rodar o código
+  document.addEventListener('DOMContentLoaded', function() {
+    // acha a div que segura as mensagens
+    const messagesContainer = document.querySelector('.messages');
 
+    // se a div existir na página, faz a mágica
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  });
 </script>
 
 </body>

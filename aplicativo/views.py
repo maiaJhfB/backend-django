@@ -112,17 +112,19 @@ def artist_chats_list(request):
         'is_artist': True
     })
 
+# aplicatico/views.py
+
 @login_required
-@user_passes_test(is_artist_check, login_url='/login/') # Redireciona se não for artista
+@user_passes_test(is_artist_check, login_url='/login/')
 def artist_chat_detail(request, conversa_id):
-    # Esta view exibe o chat específico entre o artista logado e um cliente
     user = request.user
     tatuador_perfil = get_object_or_404(CadastroTatuador, usuario=user)
     
-    # Garante que a conversa pertence ao artista logado
     current_conversa = get_object_or_404(Conversa, id=conversa_id, artista=tatuador_perfil)
     
-    # O "outro lado" da conversa é o cliente
+    # 1. BUSCA A LISTA DE TODAS AS CONVERSAS PARA A SIDEBAR (A LINHA QUE FALTAVA)
+    conversas_do_artista = Conversa.objects.filter(artista=tatuador_perfil).order_by('-ultima_atualizacao')
+
     cliente_chat = current_conversa.usuario 
     mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
 
@@ -131,7 +133,7 @@ def artist_chat_detail(request, conversa_id):
         if form.is_valid():
             nova_msg = form.save(commit=False)
             nova_msg.conversa = current_conversa
-            nova_msg.remetente = user # O remetente é o artista logado
+            nova_msg.remetente = user
             nova_msg.save()
             current_conversa.ultima_atualizacao = timezone.now()
             current_conversa.save()
@@ -139,13 +141,15 @@ def artist_chat_detail(request, conversa_id):
     else:
         form = MensagemForm()
 
+    # 2. MANDA TUDO PRO HTML, INCLUSIVE A LISTA E O ID DO CHAT ATIVO
     return render(request, 'aplicativo/artist_chat_detail.html', {
-        'cliente_chat': cliente_chat, # O cliente com quem o artista está conversando
+        'conversas_do_artista': conversas_do_artista, # <-- Adicionado!
+        'cliente_chat': cliente_chat,
         'mensagens': mensagens,
         'form': form,
         'current_user_id': user.id,
-        'conversa_id': conversa_id,
-        'is_artist': True # Passa a flag para o template
+        'active_chat_id': conversa_id, # <-- Renomeado para ficar claro
+        'is_artist': True
     })
 
 
