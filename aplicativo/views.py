@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .models import PerfilUsuario, CadastroTatuador, Mensagem, Conversa # Import Conversa
+from .models import PerfilUsuario, CadastroTatuador, Mensagem, Conversa
 from .forms import MensagemForm, CadastroUsuarioForm, LoginForm
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserChangeForm
 from django import forms
 from django.utils import timezone
 
+# Função auxiliar para verificar se o usuário é um artista
+def is_artist_check(user):
+    return hasattr(user, 'tatuador') and user.tatuador is not None
 
 # Create your views here.
 
@@ -52,12 +54,18 @@ def logout_view(request):
 
 @login_required
 def chat_view(request, artista_id=None):
+    # Esta view é para a interface do CLIENTE
     user = request.user
+    
+    # Redireciona artista para sua própria interface de chat
+    if is_artist_check(user):
+        return redirect('artist_chats_list')
+
     conversas_do_usuario = Conversa.objects.filter(usuario=user).order_by('-ultima_atualizacao')
     
-    current_conversa = None
     artista_selecionado = None
     mensagens = []
+    current_conversa = None
     
     if artista_id:
         artista_selecionado = get_object_or_404(CadastroTatuador, id=artista_id)
@@ -67,26 +75,78 @@ def chat_view(request, artista_id=None):
         )
         mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
 
-    if request.method == "POST" and current_conversa: # Only allow sending messages if a chat is selected
+    if request.method == "POST" and current_conversa: # Só permite enviar se uma conversa está selecionada
         form = MensagemForm(request.POST)
         if form.is_valid():
             nova_msg = form.save(commit=False)
             nova_msg.conversa = current_conversa
-            nova_msg.remetente = user # The logged-in user is the sender
+            nova_msg.remetente = user # O remetente é o cliente logado
             nova_msg.save()
-            current_conversa.ultima_atualizacao = timezone.now() # Update conversation timestamp
-            current_conversa.save()
-            return redirect('chat_com_artista', artista_id=artista_id) # Redirect to the specific chat
+            current_conversa.ultima_atualizacao = timezone.now()
+            return redirect('chat_com_artista', artista_id=artista_id)
     else:
         form = MensagemForm()
 
     return render(request, 'aplicativo/chat.html', {
-    'conversas_do_usuario': conversas_do_usuario,
-    'artista_selecionado': artista_selecionado,
-    'mensagens': mensagens,
-    'form': form,
-    'current_user_id': user.id,
-})
+        'conversas_do_usuario': conversas_do_usuario,
+        'artista_selecionado': artista_selecionado,
+        'mensagens': mensagens,
+        'form': form,
+        'current_user_id': user.id,
+        'is_artist': False # Passa a flag para o template
+    })
+
+# --- NOVAS VIEWS PARA A INTERFACE DO TATUADOR ---
+
+@login_required
+@user_passes_test(is_artist_check, login_url='/login/') # Redireciona se não for artista
+def artist_chats_list(request):
+    # Esta view lista TODAS as conversas que este artista tem
+    user = request.user
+    tatuador_perfil = get_object_or_404(CadastroTatuador, usuario=user)
+    
+    conversas_do_artista = Conversa.objects.filter(artista=tatuador_perfil).order_by('-ultima_atualizacao')
+    
+    return render(request, 'aplicativo/artist_chats_list.html', {
+        'conversas_do_artista': conversas_do_artista,
+        'is_artist': True
+    })
+
+@login_required
+@user_passes_test(is_artist_check, login_url='/login/') # Redireciona se não for artista
+def artist_chat_detail(request, conversa_id):
+    # Esta view exibe o chat específico entre o artista logado e um cliente
+    user = request.user
+    tatuador_perfil = get_object_or_404(CadastroTatuador, usuario=user)
+    
+    # Garante que a conversa pertence ao artista logado
+    current_conversa = get_object_or_404(Conversa, id=conversa_id, artista=tatuador_perfil)
+    
+    # O "outro lado" da conversa é o cliente
+    cliente_chat = current_conversa.usuario 
+    mensagens = Mensagem.objects.filter(conversa=current_conversa).order_by('timestamp')
+
+    if request.method == "POST":
+        form = MensagemForm(request.POST)
+        if form.is_valid():
+            nova_msg = form.save(commit=False)
+            nova_msg.conversa = current_conversa
+            nova_msg.remetente = user # O remetente é o artista logado
+            nova_msg.save()
+            current_conversa.ultima_atualizacao = timezone.now()
+            current_conversa.save()
+            return redirect('artist_chat_detail', conversa_id=conversa_id)
+    else:
+        form = MensagemForm()
+
+    return render(request, 'aplicativo/artist_chat_detail.html', {
+        'cliente_chat': cliente_chat, # O cliente com quem o artista está conversando
+        'mensagens': mensagens,
+        'form': form,
+        'current_user_id': user.id,
+        'conversa_id': conversa_id,
+        'is_artist': True # Passa a flag para o template
+    })
 
 
 def carol_view(request):
@@ -111,7 +171,7 @@ def sucesso(request):
 class EditarNomeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name']
+        fields = ['first_name', 'last_name', 'email']
 
 @login_required
 def editar_nome(request):
